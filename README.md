@@ -1,7 +1,7 @@
 # Quiztopia (multiplayer trivia game)
 
 
-Quiztopia will be a multiplayer trivia game that players can play real time and compete with each other. The modern trivia game has emerged in the 20th century and has been popular ever since. Trivia 
+Quiztopia will be a multiplayer trivia game that players can play real time and compete with each other. The modern trivia game has emerged in the 20th century and has been popular ever since. In Quiztopia you will be able to compete with friends and family. Play to answer some fun trivia questions.
 
 ## 🚀 Specification Deliverable
 
