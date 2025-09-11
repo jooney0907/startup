@@ -21,17 +21,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 Have you and your family wanted to do something together but didn't know what? With quiztopia you will never have to worry about finding a fun activity with your family ever again. Quiztopia allows users to sign in and go through various different questions. Quiztopia is a simple but very fun way to compete and see which family member or friend has the greatest trivai knowledge!
 
 ### Design
-
-![Design image](placeholder.png)
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
+![IMG_7712](https://github.com/user-attachments/assets/2d86469a-5413-40d2-baae-5370ce5ba323)
+![IMG_7711](https://github.com/user-attachments/assets/c81d2cf5-6cbb-4a46-a964-0a6b6fe4e861)
 
 ### Key features
 
