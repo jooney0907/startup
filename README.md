@@ -1,15 +1,7 @@
 # Quiztopia (multiplayer trivia game)
 
-[My Notes](notes.md)
 
-Quiztopia will be a multiplayer trivia game that players can play real time and compete with each other. The modern trivia game has emerged in the 20th century 
-
-
-> [!NOTE]
->  This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
-
-> [!NOTE]
->  If you are not familiar with Markdown then you should review the [documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) before continuing.
+Quiztopia will be a multiplayer trivia game that players can play real time and compete with each other. The modern trivia game has emerged in the 20th century and has been popular ever since. Trivia 
 
 ## 🚀 Specification Deliverable
 
@@ -18,15 +10,15 @@ Quiztopia will be a multiplayer trivia game that players can play real time and 
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [ x] Proper use of Markdown
+- [ x] A concise and compelling elevator pitch
+- [ x] Description of key features
+- [ x] Description of how you will use each technology
+- [ x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
-Have you and your family wanted to do something together but didn't know what? With quiztopia you will never have to worry about finding a fun activity with your family ever again. Quiztopia is a simple but very fun way to compete and see which family member or friend has the greatest trivai knowledge!
+Have you and your family wanted to do something together but didn't know what? With quiztopia you will never have to worry about finding a fun activity with your family ever again. Quiztopia allows users to sign in and go through various different questions. Quiztopia is a simple but very fun way to compete and see which family member or friend has the greatest trivai knowledge!
 
 ### Design
 
@@ -43,20 +35,22 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- People can register and log in
+- Multiplayer lobbies
+- database to store high scores and login information
+- Live trivia questions with instant feedback to see what the right answer was
+- grabs trivia questions from a API
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Will have 3 HTML pages. The first page is the login page and then it will take them to the lobby once they log in. Once the game starts, it will get them into the game page. 
+- **CSS** - Styling so that it is visually appeasing make the buttons colorful. 
+- **React** - Provides login, lobby, trivia questions, and scoreboard.
+- **Service** - Backend service with endpoints for things like /register, /login, /scores. Grabs trivia questions from https://opentdb.com/browse.php?page=3
+- **DB/Login** - Going to store user information and high scores. 
+- **WebSocket** - Will have real time player functions. For example people will be able to play with each other in real time. 
 
 ## 🚀 AWS deliverable
 
