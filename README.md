@@ -1,15 +1,7 @@
-# Your startup name here
-
-[My Notes](notes.md)
-
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+# Quiztopia (multiplayer trivia game)
 
 
-> [!NOTE]
->  This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
-
-> [!NOTE]
->  If you are not familiar with Markdown then you should review the [documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) before continuing.
+Quiztopia will be a multiplayer trivia game that players can play real time and compete with each other. The modern trivia game has emerged in the 20th century and has been popular ever since. In Quiztopia you will be able to compete with friends and family. Play to answer some fun trivia questions.
 
 ## 🚀 Specification Deliverable
 
@@ -18,45 +10,38 @@ A brief description of the application here. Lorem ipsum dolor sit amet, consect
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] Proper use of Markdown
+- [x] A concise and compelling elevator pitch
+- [x] Description of key features
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Have you and your family wanted to do something together but didn't know what? With quiztopia you will never have to worry about finding a fun activity with your family ever again. Quiztopia allows users to sign in and go through various different questions. Quiztopia is a simple but very fun way to compete and see which family member or friend has the greatest trivai knowledge!
 
 ### Design
-
-![Design image](placeholder.png)
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
+![IMG_7712](https://github.com/user-attachments/assets/2d86469a-5413-40d2-baae-5370ce5ba323)
+![IMG_7711](https://github.com/user-attachments/assets/c81d2cf5-6cbb-4a46-a964-0a6b6fe4e861)
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- People can register and log in
+- Multiplayer lobbies
+- database to store high scores and login information
+- Live trivia questions with instant feedback to see what the right answer was
+- grabs trivia questions from a API
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Will have 3 HTML pages. The first page is the login page and then it will take them to the lobby once they log in. Once the game starts, it will get them into the game page. 
+- **CSS** - Styling so that it is visually appeasing make the buttons colorful. 
+- **React** - Provides login, lobby, trivia questions, and scoreboard.
+- **Service** - Backend service with endpoints for things like /register, /login, /scores. Grabs trivia questions from https://opentdb.com/browse.php?page=3
+- **DB/Login** - Going to store user information and high scores. 
+- **WebSocket** - Will have real time player functions. For example people will be able to play with each other in real time. 
 
 ## 🚀 AWS deliverable
 
