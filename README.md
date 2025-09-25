@@ -47,21 +47,21 @@ I am going to use the required technologies in the following ways.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Server deployed and accessible with custom domain name** - [My server link](https://yourdomainnamehere.click).
+- [x] **Server deployed and accessible with custom domain name** - https://playquiztopia.click
 
 ## 🚀 HTML deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - 5 html files and one for each part of the website. One is the register('register.html'), lobby('lobby.html'), scores('scores.html'), game('game.html'), about(about.html), and home page('index.html)'.
+- [x] **Proper HTML element usage** - I have it so that I included header, footer, main, img, button, and other various things. 
+- [x] **Links** - I have links that make it so that you can go click on a button and go to another page
+- [X] **Text** - There is text in the about page.
+- [X] **3rd party API placeholder** - Trivia questions will be from a API.
+- [X] **Images** - Pictures in about page and game page. 
+- [x] **Login placeholder** - In my Index file there is a place to login.
+- [x] **DB data placeholder** - High scores on scores page.
+- [x] **WebSocket placeholder** - on the game page you will be able to see who else got it right and their answers. 
 
 ## 🚀 CSS deliverable
 
