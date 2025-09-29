@@ -10,10 +10,10 @@
   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
   crossorigin="anonymous"
 />
- <link rel="stylesheet" href="main.css" />
+   <link rel="stylesheet" href="main.css" />
 
 </head>
-<body>
+<body class ="bg-dark text-light">
   <header>
     <h1>Quiztopia<sup>&reg;</sup></h1>
   <nav class="nav">
@@ -23,24 +23,30 @@
 </nav>
     <hr>
   </header>
-  <main>
-    <h3>Play now!</h3>
-<div class="form-floating mb-3">
-  <input type="email" class="form-control" id="floatingInput" placeholder="tim111 ">
-  <label for="floatingInput">Username</label>
-</div>
-<div class="form-floating">
-  <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-  <label for="floatingPassword">Password</label>
-</div>
-    <a href="lobby.html">
-      <button>Log in</button>
-    </a>
-    <h3>Don't have an account? Register now!</h3>
-    <a href="register.html">
-      <button>Register</button>
-    </a>
-  </main>
+   <main class="container text-center py-5" style="max-width: 600px;">
+
+  <h3>Play now!</h3>
+
+  <!-- Use a form so Login works naturally -->
+  <form method="get" action="lobby.html" class="text-start">
+    <div class="input-group mb-3">
+      <input class="form-control" type="text" name="username" placeholder="Username" required />
+    </div>
+
+    <div class="input-group mb-4">
+      <input class="form-control" type="password" name="password" placeholder="Password" required />
+    </div>
+
+    <div class="d-grid gap-2 mb-4">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </form>
+
+  <h3>Don't have an account? Register now!</h3>
+  <a href="register.html" class="btn btn-secondary">Register</a>
+
+</main>
+
   <footer>
     <hr />
     <br />
