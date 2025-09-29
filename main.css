@@ -55,3 +55,6 @@ footer a {
     flex: 1 100vh;
   }
 }
+.login-main {
+  max-width: 600px;
+}
