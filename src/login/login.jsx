@@ -6,7 +6,8 @@ export function Login() {
     <main className="container text-center py-5" style={{ maxWidth: "600px" }}>
       <h3>Play now!</h3>
 
-      <form method="get" action="lobby.html" className="text-start">
+      {/* removed action/method */}
+      <form className="text-start">
         <div className="input-group mb-3">
           <input className="form-control" type="text" name="username" placeholder="Username" required />
         </div>
@@ -16,7 +17,8 @@ export function Login() {
         </div>
 
         <div className="d-grid gap-2 mb-1">
-          <button type="submit" className="btn btn-primary">Login</button>
+          {/* replace submit button with a NavLink styled as a button */}
+          <NavLink to="/lobby" className="btn btn-primary">Login</NavLink>
         </div>
       </form>
 
