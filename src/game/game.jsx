@@ -1,6 +1,6 @@
 import React from 'react';
-import './about.css'
-export function About() {
+import './game.css'
+export function Game() {
   return (
   <main>
     <div class = "flex-row">
