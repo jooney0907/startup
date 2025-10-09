@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './app.css';
+
+export default function App() {
+  return (
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -14,3 +19,5 @@
     <script type="module" src="/index.jsx"></script>
   </body>
 </html>
+  );
+}
