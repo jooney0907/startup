@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export function Login() {
   return (
-    <main className="container text-center py-5" style={{ maxWidth: "600px" }}>
+    <main className="container text-center" >
       <h3>Play now!</h3>
       <form className="text-start">
         <div className="input-group mb-3">
