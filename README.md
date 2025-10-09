@@ -67,13 +67,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Header, footer, and main content body** - I did not complete this part of the deliverable.
-- [ ] **Navigation elements** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing** - I did not complete this part of the deliverable.
-- [ ] **Application elements** - I did not complete this part of the deliverable.
-- [ ] **Application text content** - I did not complete this part of the deliverable.
-- [ ] **Application images** - I did not complete this part of the deliverable.
-
+- [x] **Header, footer, and main content body** - I made a css file for each individual html file. Most of them have similar/same content in it.
+- [x] **Navigation elements** - I used bootstrap nav to help out.    
+- [x] **Responsive to window resizing** - I used bootstrap and displayflex to respond to what happens when the window resizes.
+- [x] **Application elements** - I used displayflex and I used other things like margins.
+- [x] **Application text content** - I used bootstrap's class lead to make it look better. 
+- [x] **Application images** - I smoothed out the edges of the picture and editted the size of the images.
 ## 🚀 React part 1: Routing deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
