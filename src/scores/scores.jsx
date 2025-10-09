@@ -1,6 +1,6 @@
 import React from 'react';
-import './about.css'
-export function About() {
+import './scores.css'
+export function Scores() {
   return (
   <main className="container text-center my-4">
     <div id="picture" className="picture-box mb-4">
