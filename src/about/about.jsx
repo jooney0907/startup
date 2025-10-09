@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import './about.css'
 export function About() {
   return (
   <main className="container text-center my-4">
     <div id="picture" className="picture-box mb-4">
-      <img src="quiz.jpg" alt="Trivia game" className="img-fluid rounded shadow" style="max-width:400px;" />
+      <img src="/quiz.jpg" alt="Trivia game" className="img-fluid rounded shadow" style={{ maxWidth: "400px"}} />
     </div>
 
     <p className="lead">

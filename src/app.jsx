@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
+import { Login } from './login/login';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Game } from './game/game';
 import { Register } from './register/register';
@@ -31,6 +32,7 @@ export default function App() {
         {/* Render routes inside main */}
         <main className="container text-center py-5" style={{ maxWidth: 600 }}>
           <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/game" element={<Game />} />
             <Route path="/scores" element={<Scores />} />
             <Route path="/about" element={<About />} />

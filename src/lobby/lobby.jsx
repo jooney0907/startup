@@ -1,11 +1,10 @@
-import React from 'react';
-import './lobby.css'
+import React from "react";
 export function Lobby() {
   return (
-<main class="container text-center py-5 lobby-main">
-  <div class="d-flex justify-content-center align-items-center mb-4 gap-3">
-    <h2 class="m-0">Lobby</h2>
-    <h2 class="m-0"><strong>12</strong> Players</h2>
+<main className="container text-center py-5 lobby-main">
+  <div className="d-flex justify-content-center align-items-center mb-4 gap-3">
+    <h2 className="m-0">Lobby</h2>
+    <h2 className="m-0"><strong>12</strong> Players</h2>
   </div>
 
   <section>
@@ -25,7 +24,7 @@ export function Lobby() {
     </ul>
 
     <a href="game.html">
-      <button className="btn btn-primary mt-3">Start game</button>
+      <button class="btn btn-primary mt-3">Start game</button>
     </a>
   </section>
 </main>
