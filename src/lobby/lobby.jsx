@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-
+import './lobby.css';
 export function Lobby() {
   return (
     <main className="container text-center py-5 lobby-main">

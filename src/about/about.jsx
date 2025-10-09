@@ -1,5 +1,5 @@
 import React from "react";
-import './about.css'
+import './about.css';
 export function About() {
   return (
   <main className="container text-center my-4">
