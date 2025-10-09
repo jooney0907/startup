@@ -3,9 +3,9 @@ import './game.css'
 export function Game() {
   return (
   <main>
-    <div class = "flex-row">
-      <div id="picture" class="picture-box"><img width="400px" src="einstein.jpg" alt="random" style="margin-right: 60px" /></div>
-      <div class = "flex-column">
+    <div className = "flex-row">
+      <div id="picture" className="picture-box"><img width="400px" src="einstein.jpg" alt="random" style="margin-right: 60px" /></div>
+      <div className = "flex-column">
       <h3>Q: Who was the first President of the United States?</h3>
       <h2>A:</h2>
       <h2>B:</h2>

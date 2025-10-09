@@ -10,22 +10,22 @@ export function Lobby() {
 
   <section>
     <ul id="player-list" class="row list-unstyled">
-      <li class="col-4 mb-3">Timmy</li>
-      <li class="col-4 mb-3">Jeff</li>
-      <li class="col-4 mb-3">Sangjoon</li>
-      <li class="col-4 mb-3">Carlos</li>
-      <li class="col-4 mb-3">Tyler</li>
-      <li class="col-4 mb-3">Alyssa</li>
-      <li class="col-4 mb-3">Christian</li>
-      <li class="col-4 mb-3">Abigail</li>
-      <li class="col-4 mb-3">Emma</li>
-      <li class="col-4 mb-3">Gwen</li>
-      <li class="col-4 mb-3">Izzy</li>
-      <li class="col-4 mb-3">Emily</li>
+      <li className="col-4 mb-3">Timmy</li>
+      <li className="col-4 mb-3">Jeff</li>
+      <li className="col-4 mb-3">Sangjoon</li>
+      <li className="col-4 mb-3">Carlos</li>
+      <li className="col-4 mb-3">Tyler</li>
+      <li className="col-4 mb-3">Alyssa</li>
+      <li className="col-4 mb-3">Christian</li>
+      <li className="col-4 mb-3">Abigail</li>
+      <li className="col-4 mb-3">Emma</li>
+      <li className="col-4 mb-3">Gwen</li>
+      <li className="col-4 mb-3">Izzy</li>
+      <li className="col-4 mb-3">Emily</li>
     </ul>
 
     <a href="game.html">
-      <button class="btn btn-primary mt-3">Start game</button>
+      <button className="btn btn-primary mt-3">Start game</button>
     </a>
   </section>
 </main>
