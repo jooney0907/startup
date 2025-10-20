@@ -97,130 +97,70 @@ Handling the toggling of the checkboxes was particularly interesting.
   ))}
 </div>
 ```
+<link> elements belong in the document <head> and associate external resources—like stylesheets—using attributes such as rel and href.
 
-The <link> tag goes inside the <head> of an HTML page. It connects your page to outside files like stylesheets using attributes such as rel and href.
+A <div> tag is a generic block-level container used to group other elements for styling or layout purposes.
 
-A <div> is a simple container used to group other elements, often for layout or styling.
+#title matches the single element whose id is title, whereas .grid matches every element whose class list includes grid.
 
-#title selects the element with the id “title”.
-.grid selects all elements with the class “grid”.
+Padding is the space inside an element between its content and border; margin is the space outside the border that separates the element from neighbors.
 
-Padding is the space inside an element (between its content and its border).
-Margin is the space outside the element (between it and others).
+When a container uses display: flex, its child images become flex items laid out in a row by default, wrapping or resizing according to the flex configuration.
 
-When you set display: flex on a container, its child elements line up in a row by default and can wrap or resize depending on your flex settings.
+A rule like padding: 10px 20px; adds 10 px of space above and below the content and 20 px on the left and right inside the element’s border.
 
-padding: 10px 20px; means: 10 px space on top and bottom, and 20 px on the left and right.
+An arrow-function declaration such as const f = () => expression; assigns an anonymous function to f and preserves lexical this binding.
 
-<span> elements are inline by default, while <div> elements are block-level.
+[1,2,3].map(n => n * 2) returns a new array [2, 4, 6] without altering the original array.
+
+document.getElementById('btn').addEventListener('click', () => console.log('clicked')); logs “clicked” each time the element is clicked.
+
+document.querySelector('#something') retrieves the first element in the DOM whose id is something.
+
+True DOM statements include: it models HTML as a node tree, scripts can traverse/modify nodes, and DOM property changes update what the browser renders.
+
+<span> elements are inline by default.
 
 div { background-color: red; } colors every <div> red.
 
-To make an image a clickable link:
+Wrap an <img> inside an <a> to make the image a hyperlink, e.g., <a href="https://example.com"><img src="pic.jpg" alt="description"></a>.
 
-<a href="https://example.com">
-  <img src="pic.jpg" alt="description">
-</a>
+The CSS box model layers from inside out are: content → padding → border → margin.
 
+Assign the word “trouble” a class and target it: span.trouble { color: green; }, leaving other text like “double” unaffected.
 
-The CSS box model goes like this: content → padding → border → margin.
+for (let i = 0; i < 3; i++) { console.log(i); } prints 0, then 1, then 2.
 
-To style only the word “trouble”:
+document.getElementById('byu').style.color = 'green'; turns the text of the element with id byu green.
 
-<span class="trouble">trouble</span>
+Opening tags: paragraph <p>, ordered list <ol>, unordered list <ul>, second-level heading <h2>, first-level heading <h1>, third-level heading <h3>.
 
-.trouble { color: green; }
+Declare HTML5 with <!DOCTYPE html>.
 
+Control-flow syntax examples: if (condition) { … } else { … }, for (init; condition; update) { … }, while (condition) { … }, and switch (value) { case …: break; default: … }.
 
-Declare HTML5 at the top of your page with:
-<!DOCTYPE html>
+Create an object with const obj = { key: 'value', method() { return 1; } };.
 
-Common HTML tags:
-<p> for paragraphs,
-<ol> for ordered lists,
-<ul> for unordered lists,
-<h1>, <h2>, <h3> for headings (biggest to smaller).
+JavaScript objects are extensible: obj.newProp = 42; adds a new property at runtime.
 
-JavaScript Basics
+Include JavaScript with <script src="file.js"></script> or inline <script>…</script>.
 
-Arrow functions are short ways to write functions.
-Example:
+Change just the “animal” text via document.getElementById('animal').textContent = 'crow';, leaving other nodes (like “fish”) untouched.
 
-const f = () => expression;
+JSON is a language-independent, text-based format using key/value pairs and arrays with double-quoted strings.
 
+Command purposes: chmod (permissions), pwd (current directory), cd (change directory), ls (list), vim/nano (editors), mkdir (make directory), mv (move/rename), rm (remove), man (manual), ssh (secure shell), ps (processes), wget (download), sudo (run with elevated privileges).
 
-It keeps the same this context as the code around it.
+ssh user@host opens a remote shell session.
 
-[1, 2, 3].map(n => n * 2) returns a new array [2, 4, 6] without changing the original.
+ls -la lists all entries—including hidden files—with detailed metadata such as permissions, ownership, size, and timestamps.
 
-document.getElementById('btn').addEventListener('click', () => console.log('clicked'));
-→ Logs “clicked” each time you click the element with id btn.
+For banana.fruit.bozo.click, .click is the top-level domain, bozo.click is the root domain, and banana.fruit is the chained subdomain.
 
-document.querySelector('#something') finds the first element with id something.
+Using HTTPS effectively requires a valid TLS certificate to provide encrypted, warning-free connections.
 
-The DOM (Document Object Model) represents your HTML as a tree of nodes.
-You can use scripts to read or change these nodes, and any changes update what you see in the browser.
+A DNS A record maps a hostname directly to an IPv4 address and cannot target another A record (aliases use CNAMEs).
 
-To change text color:
+Port 443 is reserved for HTTPS, port 80 for HTTP, and port 22 for SSH.
 
-document.getElementById('byu').style.color = 'green';
-
-
-To change just one piece of text:
-
-document.getElementById('animal').textContent = 'crow';
-
-
-Loops:
-
-for (let i = 0; i < 3; i++) {
-  console.log(i);
-}
-
-
-→ Prints 0, then 1, then 2.
-
-Control flow examples:
-
-if (...) { ... } else { ... }
-
-for (...) { ... }
-
-while (...) { ... }
-
-switch (value) { case ...: break; default: ... }
-
-Create an object:
-
-const obj = {
-  key: 'value',
-  method() { return 1; }
-};
-
-
-JavaScript objects can grow:
-
-obj.newProp = 42;
-
-
-Add JavaScript to HTML using:
-
-<script src="file.js"></script>
-
-
-or inline:
-
-<script> ... </script>
-
-
-Promises:
-
-Promise.resolve('done').then(v => console.log(v));
-
-
-→ Prints “done”.
-
-JSON
-
-JSON (JavaScript Object Notation) is a text format that uses key/value pairs and arrays.
-It always uses double quotes for strings and works across programming languages.
+Promise.resolve('done').then(v => console.log(v)); prints done.
