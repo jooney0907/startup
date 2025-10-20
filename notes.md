@@ -97,3 +97,130 @@ Handling the toggling of the checkboxes was particularly interesting.
   ))}
 </div>
 ```
+
+The <link> tag goes inside the <head> of an HTML page. It connects your page to outside files like stylesheets using attributes such as rel and href.
+
+A <div> is a simple container used to group other elements, often for layout or styling.
+
+#title selects the element with the id “title”.
+.grid selects all elements with the class “grid”.
+
+Padding is the space inside an element (between its content and its border).
+Margin is the space outside the element (between it and others).
+
+When you set display: flex on a container, its child elements line up in a row by default and can wrap or resize depending on your flex settings.
+
+padding: 10px 20px; means: 10 px space on top and bottom, and 20 px on the left and right.
+
+<span> elements are inline by default, while <div> elements are block-level.
+
+div { background-color: red; } colors every <div> red.
+
+To make an image a clickable link:
+
+<a href="https://example.com">
+  <img src="pic.jpg" alt="description">
+</a>
+
+
+The CSS box model goes like this: content → padding → border → margin.
+
+To style only the word “trouble”:
+
+<span class="trouble">trouble</span>
+
+.trouble { color: green; }
+
+
+Declare HTML5 at the top of your page with:
+<!DOCTYPE html>
+
+Common HTML tags:
+<p> for paragraphs,
+<ol> for ordered lists,
+<ul> for unordered lists,
+<h1>, <h2>, <h3> for headings (biggest to smaller).
+
+JavaScript Basics
+
+Arrow functions are short ways to write functions.
+Example:
+
+const f = () => expression;
+
+
+It keeps the same this context as the code around it.
+
+[1, 2, 3].map(n => n * 2) returns a new array [2, 4, 6] without changing the original.
+
+document.getElementById('btn').addEventListener('click', () => console.log('clicked'));
+→ Logs “clicked” each time you click the element with id btn.
+
+document.querySelector('#something') finds the first element with id something.
+
+The DOM (Document Object Model) represents your HTML as a tree of nodes.
+You can use scripts to read or change these nodes, and any changes update what you see in the browser.
+
+To change text color:
+
+document.getElementById('byu').style.color = 'green';
+
+
+To change just one piece of text:
+
+document.getElementById('animal').textContent = 'crow';
+
+
+Loops:
+
+for (let i = 0; i < 3; i++) {
+  console.log(i);
+}
+
+
+→ Prints 0, then 1, then 2.
+
+Control flow examples:
+
+if (...) { ... } else { ... }
+
+for (...) { ... }
+
+while (...) { ... }
+
+switch (value) { case ...: break; default: ... }
+
+Create an object:
+
+const obj = {
+  key: 'value',
+  method() { return 1; }
+};
+
+
+JavaScript objects can grow:
+
+obj.newProp = 42;
+
+
+Add JavaScript to HTML using:
+
+<script src="file.js"></script>
+
+
+or inline:
+
+<script> ... </script>
+
+
+Promises:
+
+Promise.resolve('done').then(v => console.log(v));
+
+
+→ Prints “done”.
+
+JSON
+
+JSON (JavaScript Object Notation) is a text format that uses key/value pairs and arrays.
+It always uses double quotes for strings and works across programming languages.
