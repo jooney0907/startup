@@ -1,42 +1,36 @@
 // src/about/About.jsx
-import React from "react";
-import "./about.css";
+import React from 'react';
+import './about.css';
 
 export function About() {
-  // 1x1 placeholder so layout doesn't jump
-  const [imageUrl, setImageUrl] = React.useState(
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
-  );
+  const [imageUrl, setImageUrl] = React.useState('');
+  const [quote, setQuote] = React.useState('Loading inspirational quote...');
+  const [quoteAuthor, setQuoteAuthor] = React.useState('Unknown');
 
   React.useEffect(() => {
-    // Swap in your real image once the component mounts
-    setImageUrl("/quiz.jpg");
+    setImageUrl('/placeholder.png');
+    setQuote('Words are cheap. Show me the code.');
+    setQuoteAuthor('Linus Torvalds');
   }, []);
 
-  function handleImgError() {
-    // Graceful fallback if /quiz.jpg is missing
-    setImageUrl("/placeholder.jpg"); // Put placeholder.jpg in /public
-  }
-
   return (
-    <main className="container text-center my-4">
-      <div id="picture" className="picture-box mb-4">
-        <img
-          src={imageUrl}
-          onError={handleImgError}
-          alt="Trivia game"
-          className="img-fluid rounded shadow"
-          style={{ maxWidth: "420px" }}
-        />
-      </div>
+    <main className='container-fluid bg-secondary text-center py-5'>
+      <div className='about-wrapper'>
+        <div id='picture' className='picture-box'>
+          <img src={imageUrl} alt='random inspiration' />
+        </div>
 
-      <p className="lead">
-        Quiztopia is a multiplayer trivia game where players compete in real time.
-        Trivia has been a crowd favorite for decades—Quiztopia brings that tradition
-        into a slick, competitive online arena. Challenge friends and see who can
-        answer the most questions!
-      </p>
+        <p className='about-description'>
+          Simon is the iconic memory game that challenges you to watch, listen, and repeat. In
+          this reimagined React version the classic experience is wrapped in modern web
+          technology, paving the way for competitive play, score tracking, and real-time updates.
+        </p>
+
+        <div id='quote' className='quote-box bg-light text-dark'>
+          <p className='quote'>{quote}</p>
+          <p className='author'>— {quoteAuthor}</p>
+        </div>
+      </div>
     </main>
   );
 }
-

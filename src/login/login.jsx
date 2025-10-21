@@ -1,27 +1,36 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { AuthState } from './authState';
+import { Authenticated } from './authenticated';
+import { Unauthenticated } from './unauthenticated';
+import { MessageDialog } from './messageDialog';
 
-export function Login() {
+export function Login({ userName, authState, onAuthChange }) {
+  const [message, setMessage] = React.useState('');
+
   return (
-    <main className="container text-center" >
-      <h3>Play now!</h3>
-      <form className="text-start">
-        <div className="input-group mb-3">
-          <input className="form-control" type="text" name="username" placeholder="Username" required />
-        </div>
-
-        <div className="input-group mb-4">
-          <input className="form-control" type="password" name="password" placeholder="Password" required />
-        </div>
-
-        <div className="d-grid gap-2 mb-1">
-          <NavLink to="/lobby" className="btn btn-primary">Login</NavLink>
-        </div>
-      </form>
-
-      <h3 className="m-0 mt-2 mb-0">Don't have an account? Register now!</h3>
-      <div className="d-grid gap-2 mt-1">
-        <NavLink to="/register" className="btn btn-primary">Register</NavLink>
+    <main className='container-fluid bg-secondary text-center py-5'>
+      <div className='mx-auto' style={{ maxWidth: '420px' }}>
+        {authState !== AuthState.Unknown && <h1>Welcome to Simon</h1>}
+        {authState === AuthState.Authenticated && (
+          <Authenticated
+            userName={userName}
+            onLogout={() => {
+              setMessage('');
+              onAuthChange('', AuthState.Unauthenticated);
+            }}
+          />
+        )}
+        {authState === AuthState.Unauthenticated && (
+          <Unauthenticated
+            userName={userName}
+            onLogin={(loginUserName) => {
+              setMessage('');
+              onAuthChange(loginUserName, AuthState.Authenticated);
+            }}
+            onError={(errorMessage) => setMessage(errorMessage)}
+          />
+        )}
+        {message && <MessageDialog message={message} onDismiss={() => setMessage('')} />}
       </div>
     </main>
   );

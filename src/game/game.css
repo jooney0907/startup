@@ -1,68 +1,75 @@
-html, body { height: 100%; }
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-width: 375px;
+.play-view {
+  min-height: 100%;
 }
 
-.flex-row {
-  display: flex;
-  flex-direction: row;
+.play-layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.players-panel {
+  min-height: 320px;
+}
+
+.players-events {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.simon-game {
+  min-height: 360px;
+}
+
+.simon-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  grid-template-rows: repeat(2, minmax(120px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.simon-button {
+  width: 100%;
+  padding-top: 100%;
+  border: none;
+  border-radius: 1.5rem;
+  position: relative;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.simon-button::after {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.simon-button.green {
+  background: radial-gradient(circle at 30% 30%, #6bff89, #0f8a1a);
+}
+
+.simon-button.red {
+  background: radial-gradient(circle at 30% 30%, #ff8a7a, #b01717);
+}
+
+.simon-button.yellow {
+  background: radial-gradient(circle at 30% 30%, #ffe17a, #c7a100);
+}
+
+.simon-button.blue {
+  background: radial-gradient(circle at 30% 30%, #7ab6ff, #114d96);
+}
+
+.simon-button.active {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+@media (max-width: 600px) {
+  .simon-board {
+    gap: 0.75rem;
   }
-
-.flex-column{
-display: flex;
-flex-direction: column;
-
 }
-
-header {
-  flex: 0 80px;
-}
-
-main {
-  flex: 1 calc(100vh - 110px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-}
-
-footer {
-  flex: 0 30px;
-}
-
-menu {
-  flex: 1;
-  display: flex;
-  /*  overwrite Bootstrap so the menu does not wrap */
-  flex-direction: row !important;
-  list-style: none;
-}
-
-.navbar-brand {
-  padding-left: 0.3em;
-  border-bottom: solid rgb(182, 182, 182) thin;
-}
-
-menu .nav-item {
-  padding: 0 0.3em;
-}
-
-footer a {
-  float: right;
-}
-
-@media (max-height: 600px) {
-  header {
-    display: none;
-  }
-  footer {
-    display: none;
-  }
-  main {
-    flex: 1 100vh;
-  }
-}
-

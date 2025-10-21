@@ -164,3 +164,9 @@ A DNS A record maps a hostname directly to an IPv4 address and cannot target ano
 Port 443 is reserved for HTTPS, port 80 for HTTP, and port 22 for SSH.
 
 Promise.resolve('done').then(v => console.log(v)); prints done.
+
+## Simon React Phase 2
+
+I refactored the Simon views to be fully reactive. The About page now hydrates its content from React state with a placeholder image and quote so it is trivial to swap in remote data later. The Play view is a composite of a live event feed and the Simon game itself. The event feed listens to a notifier and trims updates so the UI stays responsive. The game keeps track of the playback sequence, player input, and score with React state. Buttons expose an imperative `press` helper so the parent can animate playback, and a lightweight Web Audio tone keeps the experience tactile without external assets. Whenever a round ends the score is persisted to local storage and announced through the notifier so the Scores view picks it up.
+
+Authentication state now lives in the App component. The Login view renders authenticated or unauthenticated subcomponents, lifts the username to the parent, and stores it in local storage. That state drives the navigation so Play and Scores are only accessible once you log in. This wiring made it obvious how to hook in real services later.
