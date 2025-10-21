@@ -1,8 +1,44 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import './scores.css';
+import "./scores.css";
 
 export function Scores() {
+  const [scores, setScores] = React.useState([]);
+
+  // Load scores from localStorage (same storage key/shape as Simon)
+  React.useEffect(() => {
+    const scoresText = localStorage.getItem("scores");
+    if (scoresText) {
+      try {
+        setScores(JSON.parse(scoresText));
+      } catch {
+        // If something weird is in localStorage, reset gracefully
+        setScores([]);
+      }
+    }
+  }, []);
+
+  // Build rows dynamically; show a friendly empty state if none
+  const scoreRows = [];
+  if (scores.length) {
+    for (const [i, score] of scores.entries()) {
+      scoreRows.push(
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td>{score.name?.split("@")[0] ?? "Anonymous"}</td>
+          <td>{score.score}</td>
+          <td>{score.date}</td>
+        </tr>
+      );
+    }
+  } else {
+    scoreRows.push(
+      <tr key="empty">
+        <td colSpan="4">Be the first to score</td>
+      </tr>
+    );
+  }
+
   return (
     <main className="container-fluid bg-secondary text-center">
       <table className="table table-dark table-striped">
@@ -14,32 +50,7 @@ export function Scores() {
             <th>Date</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Sangjoon</td>
-            <td>21</td>
-            <td>September 28, 2025</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Daniel</td>
-            <td>29</td>
-            <td>June 2, 2021</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Carlos</td>
-            <td>15</td>
-            <td>July 3, 2020</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Weeee</td>
-            <td>7</td>
-            <td>May 7, 2010</td>
-          </tr>
-        </tbody>
+        <tbody id="scores">{scoreRows}</tbody>
       </table>
 
       <NavLink to="/" className="btn btn-light">
@@ -48,4 +59,3 @@ export function Scores() {
     </main>
   );
 }
-
