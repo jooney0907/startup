@@ -5,20 +5,17 @@ import "./scores.css";
 export function Scores() {
   const [scores, setScores] = React.useState([]);
 
-  // Load scores from localStorage (same storage key/shape as Simon)
   React.useEffect(() => {
     const scoresText = localStorage.getItem("scores");
     if (scoresText) {
       try {
         setScores(JSON.parse(scoresText));
       } catch {
-        // If something weird is in localStorage, reset gracefully
         setScores([]);
       }
     }
   }, []);
 
-  // Build rows dynamically; show a friendly empty state if none
   const scoreRows = [];
   if (scores.length) {
     for (const [i, score] of scores.entries()) {
