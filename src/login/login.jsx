@@ -18,6 +18,7 @@ export function Login() {
 
   function handleLogout() {
     localStorage.removeItem("userName");
+    setUserName("");
     setPassword("");
     setIsAuthed(false);
   }
@@ -30,13 +31,15 @@ export function Login() {
     navigate("/lobby");
   }
 
-  return (
-    <main className="container text-center">
-      <h3>Play now!</h3>
+  const shortName = (userName || "player").split("@")[0];
 
+  return (
+    <main className="container d-flex flex-column align-items-center justify-content-center min-vh-100">
       {!isAuthed ? (
         <>
-          <form className="text-start" onSubmit={loginUser}>
+          <h3 className="mb-4">Login</h3>
+
+          <form className="text-start" onSubmit={loginUser} style={{ maxWidth: 360, width: "100%" }}>
             <div className="input-group mb-3">
               <input
                 className="form-control"
@@ -68,17 +71,19 @@ export function Login() {
             </div>
           </form>
 
-          <h3 className="m-0 mt-2 mb-0">Don't have an account? Register now!</h3>
-          <div className="d-grid gap-2 mt-1">
+          <h3 className="m-0 mt-3 mb-1">Don't have an account? Register now!</h3>
+          <div className="d-grid gap-2" style={{ maxWidth: 360, width: "100%" }}>
             <NavLink to="/register" className="btn btn-primary">Register</NavLink>
           </div>
         </>
       ) : (
-        // Authenticated view (Simon-style)
-        <div className="d-grid gap-2 mt-3">
-          <div className="h5">Welcome, <span className="fw-semibold">{userName}</span></div>
-          <button className="btn btn-primary" onClick={() => navigate("/lobby")}>Play</button>
-          <button className="btn btn-outline-secondary" onClick={handleLogout}>Logout</button>
+        // Authenticated view: centered welcome + buttons
+        <div className="text-center">
+          <h2 className="mb-3">welcome {shortName}!</h2>
+          <div className="d-grid gap-2" style={{ maxWidth: 220, margin: "0 auto" }}>
+            <button className="btn btn-primary" onClick={() => navigate("/lobby")}>Play</button>
+            <button className="btn btn-outline-secondary" onClick={handleLogout}>Logout</button>
+          </div>
         </div>
       )}
     </main>
