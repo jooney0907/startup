@@ -1,21 +1,19 @@
-// src/about/About.jsx
+
 import React from "react";
 import "./about.css";
 
 export function About() {
-  // 1x1 placeholder so layout doesn't jump
   const [imageUrl, setImageUrl] = React.useState(
     "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
   );
 
   React.useEffect(() => {
-    // Swap in your real image once the component mounts
     setImageUrl("/quiz.jpg");
   }, []);
 
   function handleImgError() {
-    // Graceful fallback if /quiz.jpg is missing
-    setImageUrl("/placeholder.jpg"); // Put placeholder.jpg in /public
+    
+    setImageUrl("/placeholder.jpg"); 
   }
 
   return (
