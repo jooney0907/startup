@@ -77,7 +77,6 @@ export function Login() {
           </div>
         </>
       ) : (
-        // Authenticated view: centered welcome + buttons
         <div className="text-center">
           <h2 className="mb-3">welcome {shortName}!</h2>
           <div className="d-grid gap-2" style={{ maxWidth: 220, margin: "0 auto" }}>

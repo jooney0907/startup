@@ -28,8 +28,6 @@ export default function App() {
           </nav>
           <hr />
         </header>
-
-        {/* Render routes inside main */}
         <main className="container text-center py-5" style={{ maxWidth: 600 }}>
           <Routes>
             <Route path="/" element={<Login />} />

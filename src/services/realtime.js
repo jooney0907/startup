@@ -6,7 +6,7 @@ export const Events = {
   NEW_QUESTION: "NEW_QUESTION",
   RESET: "RESET",
   END: "END",
-  ANSWER: "ANSWER", // reserved for later
+  ANSWER: "ANSWER", 
 };
 
 export class RealtimeBus {

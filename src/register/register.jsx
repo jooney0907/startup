@@ -10,7 +10,6 @@ export function Register() {
   function createUser(e) {
     e.preventDefault();
     if (!userName || !password) return;
-    // Simon-style: accept any non-empty creds, store name, go to lobby
     localStorage.setItem("userName", userName);
     navigate("/lobby");
   }
