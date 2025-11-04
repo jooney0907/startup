@@ -85,8 +85,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I have local storage done with it now once you log in and mapped out other things. I have placeholders for things like when I get the 3rd person API for my trivia questions. 
+- [x] **Hooks** - I did extensive use of useStates and useEffects 
 
 ## 🚀 Service deliverable
 
