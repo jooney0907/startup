@@ -1,34 +1,38 @@
-// services/index.js
-
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const express = require('express');
+const { v4: uuidv4 } = require('uuid'); // ✅ correct import for uuid v13+
 
 const app = express();
 
 const authCookieName = 'token';
 
-// In-memory storage (clears whenever the service restarts)
+// The scores and users are saved in memory and disappear whenever the service is restarted.
 let users = [];
 let scores = [];
 
-// Service port. In production, the front-end is hosted by this same service.
+// The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-// ---------- MIDDLEWARE ----------
+// JSON body parsing using built-in middleware
+app.use(express.json());
 
-app.use(express.json());        // parse JSON bodies
-app.use(cookieParser());        // read cookies
-app.use(express.static('public')); // serve React build from ./public
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
 
-// Router for /api endpoints
+// Serve up the front-end static content hosting
+app.use(express.static('public'));
+
+// Router for service endpoints
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
-// ---------- AUTH ROUTES ----------
+/**
+ * AUTH ROUTES
+ */
 
-// Register new user  (POST /api/auth/create)
-apiRouter.post('/auth/create', async (req, res) => {
+// CreateAuth a new user
+apiRouter.post('/auth/create', async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
     console.log('Register attempt:', email);
@@ -46,12 +50,12 @@ apiRouter.post('/auth/create', async (req, res) => {
     res.send({ email: user.email });
   } catch (err) {
     console.error('Error in /auth/create:', err);
-    res.status(500).send({ msg: 'Server error' });
+    next(err);
   }
 });
 
-// Login existing user  (POST /api/auth/login)
-apiRouter.post('/auth/login', async (req, res) => {
+// GetAuth login an existing user
+apiRouter.post('/auth/login', async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
     console.log('Login attempt:', email);
@@ -62,7 +66,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 
     const user = await findUser('email', email);
     if (user && (await bcrypt.compare(password, user.password))) {
-      user.token = generateToken();
+      user.token = uuidv4(); // ✅ generate new token
       setAuthCookie(res, user.token);
       return res.send({ email: user.email });
     }
@@ -70,11 +74,11 @@ apiRouter.post('/auth/login', async (req, res) => {
     res.status(401).send({ msg: 'Unauthorized' });
   } catch (err) {
     console.error('Error in /auth/login:', err);
-    res.status(500).send({ msg: 'Server error' });
+    next(err);
   }
 });
 
-// Logout  (DELETE /api/auth/logout)
+// DeleteAuth logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
   try {
     const user = await findUser('token', req.cookies[authCookieName]);
@@ -89,8 +93,11 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   }
 });
 
-// ---------- AUTH MIDDLEWARE ----------
+/**
+ * AUTH MIDDLEWARE
+ */
 
+// Middleware to verify that the user is authorized to call an endpoint
 const verifyAuth = async (req, res, next) => {
   try {
     const user = await findUser('token', req.cookies[authCookieName]);
@@ -104,37 +111,44 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
-// ---------- SCORE ROUTES (RESTRICTED) ----------
+/**
+ * SCORE ROUTES (RESTRICTED)
+ */
 
-// Get scores (GET /api/scores)
+// GetScores
 apiRouter.get('/scores', verifyAuth, (_req, res) => {
   res.send(scores);
 });
 
-// Submit score (POST /api/score)
+// SubmitScore
 apiRouter.post('/score', verifyAuth, (req, res) => {
   scores = updateScores(req.body);
   res.send(scores);
 });
 
-// ---------- FALLBACK + ERROR HANDLER ----------
+/**
+ * ERROR HANDLER + FALLBACK
+ */
 
 // Default error handler
-app.use((err, _req, res, _next) => {
+app.use(function (err, _req, res, _next) {
   console.error('Unhandled error:', err);
+  // send {msg: ...} so frontend can display it
   res.status(500).send({ msg: err.message || 'Server error' });
 });
 
-// Return index.html for unknown paths (React Router)
+// Return the application's default page if the path is unknown
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// ---------- HELPERS ----------
+/**
+ * HELPERS
+ */
 
+// updateScores considers a new score for inclusion in the high scores.
 function updateScores(newScore) {
   let found = false;
-
   for (const [i, prevScore] of scores.entries()) {
     if (newScore.score > prevScore.score) {
       scores.splice(i, 0, newScore);
@@ -154,21 +168,16 @@ function updateScores(newScore) {
   return scores;
 }
 
-// simple token generator (no uuid needed)
-function generateToken() {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
-}
-
 async function createUser(email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
 
   const user = {
-    email,
+    email: email,
     password: passwordHash,
-    token: generateToken(),
+    token: uuidv4(), // ✅ use uuidv4 here
   };
-
   users.push(user);
+
   return user;
 }
 
@@ -177,16 +186,15 @@ async function findUser(field, value) {
   return users.find((u) => u[field] === value);
 }
 
+// setAuthCookie in the HTTP response
 function setAuthCookie(res, authToken) {
   res.cookie(authCookieName, authToken, {
     maxAge: 1000 * 60 * 60 * 24 * 365,
-    secure: false,      // ← keep false for http://localhost
+    secure: false,     // 🔑 false for localhost/http; set true in real HTTPS
     httpOnly: true,
     sameSite: 'strict',
   });
 }
-
-// ---------- START SERVER ----------
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
