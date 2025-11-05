@@ -67,7 +67,7 @@ export function Login() {
                 className="form-control"
                 type="text"
                 name="username"
-                placeholder="Email"
+                placeholder="Username"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 required

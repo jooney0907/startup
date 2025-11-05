@@ -17,14 +17,13 @@ export function Register() {
 
       const response = await fetch("/api/auth/create", {
         method: "post",
-        body: JSON.stringify({ email: userName, password: password }), // 👈 exactly like Simon
+        body: JSON.stringify({ email: userName, password: password }), 
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
 
       if (response.status === 200) {
-        // same as Simon: store userName locally for UI
         localStorage.setItem("userName", userName);
         navigate("/lobby");
       } else {
@@ -47,7 +46,7 @@ export function Register() {
             className="form-control"
             type="text"
             name="username"
-            placeholder="Email"
+            placeholder="Username"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             required
