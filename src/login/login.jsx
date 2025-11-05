@@ -1,13 +1,14 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { loginUser, logoutUser } from "../services/authClient.js";
 
 export function Login() {
   const navigate = useNavigate();
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isAuthed, setIsAuthed] = React.useState(false);
+  const [error, setError] = React.useState("");
 
-  // Hydrate from localStorage like Simon
   React.useEffect(() => {
     const saved = localStorage.getItem("userName") || "";
     if (saved) {
@@ -16,19 +17,34 @@ export function Login() {
     }
   }, []);
 
-  function handleLogout() {
-    localStorage.removeItem("userName");
-    setUserName("");
-    setPassword("");
-    setIsAuthed(false);
+  async function handleLogout() {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      localStorage.removeItem("userName");
+      setUserName("");
+      setPassword("");
+      setIsAuthed(false);
+    }
   }
 
-  function loginUser(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     if (!userName || !password) return;
-    localStorage.setItem("userName", userName);
-    setIsAuthed(true);
-    navigate("/lobby");
+
+    try {
+      setError("");
+      const data = await loginUser(userName, password); // backend uses "email"
+      localStorage.setItem("userName", data.email);
+      setIsAuthed(true);
+      navigate("/lobby");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid username or password");
+      setIsAuthed(false);
+    }
   }
 
   const shortName = (userName || "player").split("@")[0];
@@ -39,13 +55,17 @@ export function Login() {
         <>
           <h3 className="mb-4">Login</h3>
 
-          <form className="text-start" onSubmit={loginUser} style={{ maxWidth: 360, width: "100%" }}>
+          <form
+            className="text-start"
+            onSubmit={handleLogin}
+            style={{ maxWidth: 360, width: "100%" }}
+          >
             <div className="input-group mb-3">
               <input
                 className="form-control"
                 type="text"
                 name="username"
-                placeholder="Username"
+                placeholder="Email"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 required
@@ -64,6 +84,8 @@ export function Login() {
               />
             </div>
 
+            {error && <div className="alert alert-danger py-1">{error}</div>}
+
             <div className="d-grid gap-2 mb-1">
               <button type="submit" className="btn btn-primary" disabled={!userName || !password}>
                 Login
@@ -80,8 +102,12 @@ export function Login() {
         <div className="text-center">
           <h2 className="mb-3">welcome {shortName}!</h2>
           <div className="d-grid gap-2" style={{ maxWidth: 220, margin: "0 auto" }}>
-            <button className="btn btn-primary" onClick={() => navigate("/lobby")}>Play</button>
-            <button className="btn btn-outline-secondary" onClick={handleLogout}>Logout</button>
+            <button className="btn btn-primary" onClick={() => navigate("/lobby")}>
+              Play
+            </button>
+            <button className="btn btn-outline-secondary" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
       )}
