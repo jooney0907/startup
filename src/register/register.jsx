@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./register.css";
-import { registerUser } from "../services/authClient.js";
 
 export function Register() {
   const navigate = useNavigate();
@@ -15,12 +14,26 @@ export function Register() {
 
     try {
       setError("");
-      const data = await registerUser(userName, password); 
-      localStorage.setItem("userName", data.email);
-      navigate("/lobby");
+
+      const response = await fetch("/api/auth/create", {
+        method: "post",
+        body: JSON.stringify({ email: userName, password: password }), // 👈 exactly like Simon
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (response.status === 200) {
+        // same as Simon: store userName locally for UI
+        localStorage.setItem("userName", userName);
+        navigate("/lobby");
+      } else {
+        const body = await response.json().catch(() => ({}));
+        setError(body.msg || "Failed to register");
+      }
     } catch (err) {
       console.error(err);
-      setError(err.message || "Failed to register");
+      setError("Failed to register");
     }
   }
 
@@ -56,7 +69,11 @@ export function Register() {
         {error && <div className="alert alert-danger py-1">{error}</div>}
 
         <div className="d-grid gap-2 mb-1">
-          <button type="submit" className="btn btn-primary" disabled={!userName || !password}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!userName || !password}
+          >
             Sign up
           </button>
         </div>
@@ -64,10 +81,10 @@ export function Register() {
 
       <h3 className="m-0 mt-2 mb-0">Already have an account?</h3>
       <div className="d-grid gap-2 mt-1">
-        <NavLink to="/" className="btn btn-primary">Log in</NavLink>
+        <NavLink to="/" className="btn btn-primary">
+          Log in
+        </NavLink>
       </div>
     </main>
   );
 }
-
-
