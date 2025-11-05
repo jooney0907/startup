@@ -17,32 +17,34 @@ export function Login() {
     }
   }, []);
 
-  async function handleLogout() {
-    try {
-      await logoutUser();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      localStorage.removeItem("userName");
-      setUserName("");
-      setPassword("");
-      setIsAuthed(false);
-    }
-  }
-
   async function handleLogin(e) {
     e.preventDefault();
     if (!userName || !password) return;
 
     try {
       setError("");
-      const data = await loginUser(userName, password); 
+      const data = await loginUser(userName, password);
       localStorage.setItem("userName", data.email);
       setIsAuthed(true);
+
       navigate("/lobby");
     } catch (err) {
       console.error(err);
-      setError("Invalid username or password");
+      setError(err.message || "Failed to login");
+      setIsAuthed(false);
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await logoutUser(); 
+    } catch (err) {
+      console.error(err);
+  
+    } finally {
+      localStorage.removeItem("userName");
+      setUserName("");
+      setPassword("");
       setIsAuthed(false);
     }
   }
@@ -84,28 +86,50 @@ export function Login() {
               />
             </div>
 
-            {error && <div className="alert alert-danger py-1">{error}</div>}
+            {error && (
+              <div className="alert alert-danger py-1 mb-2">{error}</div>
+            )}
 
             <div className="d-grid gap-2 mb-1">
-              <button type="submit" className="btn btn-primary" disabled={!userName || !password}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!userName || !password}
+              >
                 Login
               </button>
             </div>
           </form>
 
-          <h3 className="m-0 mt-3 mb-1">Don't have an account? Register now!</h3>
-          <div className="d-grid gap-2" style={{ maxWidth: 360, width: "100%" }}>
-            <NavLink to="/register" className="btn btn-primary">Register</NavLink>
+          <h3 className="m-0 mt-3 mb-1">
+            Don't have an account? Register now!
+          </h3>
+          <div
+            className="d-grid gap-2"
+            style={{ maxWidth: 360, width: "100%" }}
+          >
+            <NavLink to="/register" className="btn btn-primary">
+              Register
+            </NavLink>
           </div>
         </>
       ) : (
         <div className="text-center">
           <h2 className="mb-3">welcome {shortName}!</h2>
-          <div className="d-grid gap-2" style={{ maxWidth: 220, margin: "0 auto" }}>
-            <button className="btn btn-primary" onClick={() => navigate("/lobby")}>
+          <div
+            className="d-grid gap-2"
+            style={{ maxWidth: 220, margin: "0 auto" }}
+          >
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate("/lobby")}
+            >
               Play
             </button>
-            <button className="btn btn-outline-secondary" onClick={handleLogout}>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleLogout}
+            >
               Logout
             </button>
           </div>
