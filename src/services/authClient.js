@@ -1,0 +1,64 @@
+const BASE = '/api';
+
+async function handleJson(res) {
+  const text = await res.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+  }
+
+  if (!res.ok) {
+    const msg = data?.msg || `Request failed with status ${res.status}`;
+    throw new Error(msg);
+  }
+
+  return data;
+}
+
+export async function registerUser(email, password) {
+  const res = await fetch(`${BASE}/auth/create`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', 
+    body: JSON.stringify({ email, password }),
+  });
+  return handleJson(res); 
+
+export async function loginUser(email, password) {
+  const res = await fetch(`${BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ email, password }),
+  });
+  return handleJson(res); 
+}
+
+export async function logoutUser() {
+  const res = await fetch(`${BASE}/auth/logout`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+  if (!res.ok && res.status !== 204) {
+    throw new Error('Logout failed');
+  }
+}
+
+export async function fetchScores() {
+  const res = await fetch(`${BASE}/scores`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  return handleJson(res);
+}
+
+export async function submitScore(score) {
+  const res = await fetch(`${BASE}/score`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(score),
+  });
+  return handleJson(res); 
+}
