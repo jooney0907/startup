@@ -1,19 +1,29 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./scores.css";
+import { fetchScores } from "../services/authClient.js";
 
 export function Scores() {
   const [scores, setScores] = React.useState([]);
+  const [error, setError] = React.useState("");
 
   React.useEffect(() => {
-    const scoresText = localStorage.getItem("scores");
-    if (scoresText) {
+    async function loadScores() {
       try {
-        setScores(JSON.parse(scoresText));
-      } catch {
+        setError("");
+        const serverScores = await fetchScores();
+        setScores(serverScores || []);
+      } catch (err) {
+        console.error(err);
+        if (err.message.includes("Unauthorized")) {
+          setError("You must be logged in to view high scores.");
+        } else {
+          setError("Failed to load scores.");
+        }
         setScores([]);
       }
     }
+    loadScores();
   }, []);
 
   const scoreRows = [];
@@ -38,6 +48,10 @@ export function Scores() {
 
   return (
     <main className="container-fluid bg-secondary text-center">
+      <h2 className="my-3">High Scores</h2>
+
+      {error && <div className="alert alert-warning">{error}</div>}
+
       <table className="table table-dark table-striped">
         <thead className="table-dark">
           <tr>
@@ -56,3 +70,4 @@ export function Scores() {
     </main>
   );
 }
+
