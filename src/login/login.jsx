@@ -36,7 +36,7 @@ export function Login() {
 
     try {
       setError("");
-      const data = await loginUser(userName, password); // backend uses "email"
+      const data = await loginUser(userName, password); 
       localStorage.setItem("userName", data.email);
       setIsAuthed(true);
       navigate("/lobby");
