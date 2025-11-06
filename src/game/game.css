@@ -85,3 +85,111 @@ footer a {
   right: 16px;
   text-align: right;
 }
+
+
+.game-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #343a40; /* or whatever you already use */
+  color: white;
+}
+
+.game-header .game-scoreboard div {
+  font-size: 0.95rem;
+}
+
+/* === Quiztopia game layout === */
+
+.game-page {
+  min-height: calc(100vh - 80px); /* leave space for navbar */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+  background-color: #212529; /* dark background behind the card */
+}
+
+.game-card {
+  background-color: #343a40;
+  color: #f8f9fa;
+  border-radius: 18px;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+/* Header: title centered, scoreboard tucked to the right */
+.game-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.game-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.game-scoreboard {
+  font-size: 0.9rem;
+  text-align: right;
+  line-height: 1.3;
+}
+
+/* Question section */
+.game-question {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.game-question-text {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.game-meta {
+  font-size: 0.85rem;
+  color: #adb5bd;
+  margin: 0;
+}
+.answer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 320px;
+}
+
+.answer-list li + li {
+  margin-top: 0.75rem;
+}
+
+.answer-button {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #6c757d;
+  background-color: #495057;
+  color: #f8f9fa;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
+    background-color 0.08s ease-out;
+}
+
+.answer-button:hover {
+  background-color: #6c757d;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+.answer-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
