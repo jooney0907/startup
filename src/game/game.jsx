@@ -1,14 +1,21 @@
 import React from "react";
 import "./game.css";
+import { useNavigate } from "react-router-dom";
 import { getOneQuestion } from "../services/triviaApi.js";
+import { submitScore } from "../services/authClient.js";
 
 export function Game() {
+  const navigate = useNavigate();
+
   const [question, setQuestion] = React.useState(null);
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const [score, setScore] = React.useState(0);
   const [questionsAnswered, setQuestionsAnswered] = React.useState(0);
+
+  const [saving, setSaving] = React.useState(false);
+  const [saveError, setSaveError] = React.useState("");
 
   async function loadQuestion() {
     try {
@@ -41,6 +48,30 @@ export function Game() {
 
     setQuestionsAnswered((prev) => prev + 1);
     loadQuestion();
+  }
+
+  async function handleEndGame() {
+    const rawName = localStorage.getItem("userName") || "Anonymous";
+    const name = rawName.split("@")[0];
+    const payload = {
+      name,
+      score,
+      date: new Date().toLocaleDateString(),
+    };
+
+    try {
+      setSaveError("");
+      setSaving(true);
+      await submitScore(payload);
+      navigate("/scores");
+    } catch (err) {
+      console.error(err);
+      setSaveError(
+        err.message || "Could not save score. Make sure you are logged in."
+      );
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (error) {
@@ -103,6 +134,17 @@ export function Game() {
             </li>
           ))}
         </ul>
+
+        <div className="endgame-footer">
+          {saveError && <p className="endgame-error">{saveError}</p>}
+          <button
+            className="endgame-button"
+            onClick={handleEndGame}
+            disabled={saving}
+          >
+            {saving ? "Saving score..." : "End game & save score"}
+          </button>
+        </div>
       </section>
     </main>
   );
