@@ -92,12 +92,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [X] **Node.js/Express HTTP service** - Installed Express with NPM. Default port on 4000.js
+- [X] **Static middleware for frontend** - Endpoints in index.js
+- [X] **Calls to third party endpoints** - Calls for third person API and qets questions at https://opentdb.com/api_config.php 
+- [X] **Backend service endpoints** - Simple endpoints in index. 
+- [X] **Frontend calls service endpoints** - All mocked functionality removed from the frontend and replaced with calls to the service.
+- [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration,login,logout. Need to be logged in to see the scores.
 
 
 ## 🚀 DB deliverable
