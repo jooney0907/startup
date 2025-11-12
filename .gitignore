@@ -4,3 +4,4 @@ node_modules/
 dist/
 src/services/data.json
 cookies.txt
+dbConfig.json
