@@ -15,7 +15,9 @@ app.use(express.static('public'));
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
+// ---------- AUTH ROUTES ----------
 
+// CREATE / REGISTER USER  (stores credentials in MongoDB)
 apiRouter.post('/auth/create', async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
@@ -25,11 +27,13 @@ apiRouter.post('/auth/create', async (req, res, next) => {
       return res.status(400).send({ msg: 'Email and password required' });
     }
 
+    // Check MongoDB for existing user
     const existingUser = await DB.getUser(email);
     if (existingUser) {
       return res.status(409).send({ msg: 'Existing user' });
     }
 
+    // Hash and store user in MongoDB
     const passwordHash = await bcrypt.hash(password, 10);
     const user = {
       email,
@@ -47,6 +51,7 @@ apiRouter.post('/auth/create', async (req, res, next) => {
   }
 });
 
+// LOGIN USER  (retrieves credentials from MongoDB)
 apiRouter.post('/auth/login', async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
@@ -56,6 +61,7 @@ apiRouter.post('/auth/login', async (req, res, next) => {
       return res.status(400).send({ msg: 'Email and password required' });
     }
 
+    // Get user from MongoDB
     const user = await DB.getUser(email);
     if (user && (await bcrypt.compare(password, user.password))) {
       user.token = uuidv4();
@@ -72,6 +78,7 @@ apiRouter.post('/auth/login', async (req, res, next) => {
   }
 });
 
+// LOGOUT USER (clears token in MongoDB)
 apiRouter.delete('/auth/logout', async (req, res) => {
   try {
     const token = req.cookies[authCookieName];
@@ -90,6 +97,8 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   }
 });
 
+// ---------- AUTH MIDDLEWARE ----------
+
 const verifyAuth = async (req, res, next) => {
   try {
     const token = req.cookies[authCookieName];
@@ -99,8 +108,11 @@ const verifyAuth = async (req, res, next) => {
 
     const user = await DB.getUserByToken(token);
     if (user) {
+      // You could attach user to req if you want:
+      // req.user = user;
       return next();
     }
+
     res.status(401).send({ msg: 'Unauthorized' });
   } catch (err) {
     console.error('Error in verifyAuth:', err);
@@ -108,6 +120,9 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
+// ---------- SCORE ROUTES (APP DATA IN MONGODB) ----------
+
+// Get top scores from MongoDB
 apiRouter.get('/scores', verifyAuth, async (_req, res, next) => {
   try {
     const scores = await DB.getHighScores();
@@ -118,9 +133,10 @@ apiRouter.get('/scores', verifyAuth, async (_req, res, next) => {
   }
 });
 
+// Add a new score + return top scores from MongoDB
 apiRouter.post('/score', verifyAuth, async (req, res, next) => {
   try {
-    const newScore = req.body; 
+    const newScore = req.body; // e.g., { name: 'Josh', score: 123 }
 
     await DB.addScore(newScore);
     const scores = await DB.getHighScores();
@@ -132,6 +148,8 @@ apiRouter.post('/score', verifyAuth, async (req, res, next) => {
   }
 });
 
+// ---------- ERROR HANDLING & FALLBACK ----------
+
 app.use(function (err, _req, res, _next) {
   console.error('Unhandled error:', err);
   res.status(500).send({ msg: err.message || 'Server error' });
@@ -141,10 +159,12 @@ app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
+// ---------- HELPERS ----------
+
 function setAuthCookie(res, authToken) {
   res.cookie(authCookieName, authToken, {
     maxAge: 1000 * 60 * 60 * 24 * 365,
-    secure: false,     
+    secure: false,     // set to true in production with HTTPS
     httpOnly: true,
     sameSite: 'strict',
   });
