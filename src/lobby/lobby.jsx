@@ -1,7 +1,7 @@
 // src/lobby/lobby.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { RealtimeBus, Events } from '../services/realtimeWs';
+import { RealtimeBus, Events } from '../services/realtime';
 import './lobby.css';
 
 export function Lobby() {
