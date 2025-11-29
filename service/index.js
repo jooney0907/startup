@@ -10,24 +10,17 @@ const { peerProxy } = require('./peerProxy.js');
 
 const authCookieName = 'token';
 
-// The service port may be set on the command line
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-// JSON body parsing using built-in middleware
 app.use(express.json());
 
-// Use the cookie parser middleware for tracking authentication tokens
 app.use(cookieParser());
 
-// Serve up the application's static content
 const publicDir = path.join(__dirname, 'public');
 app.use(express.static(publicDir));
 
-// Router for service endpoints
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
-// CreateAuth token for a new user (register)
 apiRouter.post('/auth/create', async (req, res) => {
   if (await findUser('email', req.body.email)) {
     res.status(409).send({ msg: 'Existing user' });
@@ -39,7 +32,6 @@ apiRouter.post('/auth/create', async (req, res) => {
   }
 });
 
-// GetAuth token for the provided credentials (login)
 apiRouter.post('/auth/login', async (req, res) => {
   const user = await findUser('email', req.body.email);
   if (user) {
@@ -54,7 +46,6 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized' });
 });
 
-// DeleteAuth token if stored in cookie (logout)
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
@@ -65,7 +56,6 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
-// Middleware to verify that the user is authorized to call an endpoint
 const verifyAuth = async (req, res, next) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
@@ -75,29 +65,24 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
-// GetScores
 apiRouter.get('/scores', verifyAuth, async (req, res) => {
   const scores = await DB.getHighScores();
   res.send(scores);
 });
 
-// SubmitScore
 apiRouter.post('/score', verifyAuth, async (req, res) => {
   const scores = await updateScores(req.body);
   res.send(scores);
 });
 
-// Default error handler
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
 });
 
-// Return the application's default page if the path is unknown
 app.use((_req, res) => {
   res.sendFile(path.join(publicDir, 'index.html'));
 });
 
-// updateScores considers a new score for inclusion in the high scores.
 async function updateScores(newScore) {
   await DB.addScore(newScore);
   return DB.getHighScores();
@@ -125,18 +110,15 @@ async function findUser(field, value) {
   return DB.getUser(value);
 }
 
-// setAuthCookie in the HTTP response
 function setAuthCookie(res, authToken) {
-  // If you want dev/prod behavior, you can swap this to use process.env.NODE_ENV
   res.cookie(authCookieName, authToken, {
     maxAge: 1000 * 60 * 60 * 24 * 365,
-    secure: true,     // for local HTTP dev, change this to false
+    secure: true,     
     httpOnly: true,
     sameSite: 'strict',
   });
 }
 
-// Start HTTP service and attach WebSocket proxy
 const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
