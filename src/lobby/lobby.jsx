@@ -1,3 +1,4 @@
+// src/lobby/lobby.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { RealtimeBus, Events } from '../services/realtimeWs';
@@ -8,75 +9,88 @@ export function Lobby() {
   const [wsStatus, setWsStatus] = React.useState('connecting...');
 
   React.useEffect(() => {
+    let isMounted = true;
+
     const bus = new RealtimeBus();
-    const name =
-      (localStorage.getItem('userName') ||
-        localStorage.getItem('userEmail') ||
-        'player').split('@')[0];
 
-    // When we get any message from the socket
-    const unsubscribe = bus.subscribe((msg) => {
+    const storedName =
+      localStorage.getItem('userName') ||
+      localStorage.getItem('userEmail') ||
+      'player';
+
+    const name = storedName.split('@')[0];
+
+    const handleMessage = (msg) => {
+      if (!isMounted || !msg || typeof msg !== 'object') return;
       const { type, payload } = msg;
+      if (!payload || !payload.name) return;
 
-      if (type === Events.JOIN || type === Events.LEAVE) {
+      if (type === Events.JOIN) {
         setPlayers((prev) => {
-          const set = new Set(prev);
-
-          if (type === Events.JOIN) {
-            set.add(payload.name);
-          } else if (type === Events.LEAVE) {
-            set.delete(payload.name);
-          }
-
-          return Array.from(set);
+          if (prev.includes(payload.name)) return prev;
+          return [...prev, payload.name];
         });
+      } else if (type === Events.LEAVE) {
+        setPlayers((prev) => prev.filter((p) => p !== payload.name));
       }
-    });
+    };
 
-    // When socket opens, announce that we joined
-    bus.socket.addEventListener('open', () => {
+    const unsubscribe = bus.subscribe(handleMessage);
+
+    const handleOpen = () => {
+      if (!isMounted) return;
       setWsStatus('connected');
       bus.send(Events.JOIN, { name });
-    });
+    };
 
-    bus.socket.addEventListener('close', () => {
+    const handleClose = () => {
+      if (!isMounted) return;
       setWsStatus('disconnected');
-    });
+    };
 
-    // On unmount, announce that we left, then clean up
+    const handleError = (e) => {
+      console.error('WebSocket error', e);
+      if (!isMounted) return;
+      setWsStatus('error');
+    };
+
+    bus.socket.addEventListener('open', handleOpen);
+    bus.socket.addEventListener('close', handleClose);
+    bus.socket.addEventListener('error', handleError);
+
     return () => {
-      bus.send(Events.LEAVE, { name });
+      isMounted = false;
+      try {
+        bus.send(Events.LEAVE, { name });
+      } catch {
+        // ignore if socket already closed
+      }
       unsubscribe();
+      bus.socket.removeEventListener('open', handleOpen);
+      bus.socket.removeEventListener('close', handleClose);
+      bus.socket.removeEventListener('error', handleError);
       bus.close();
     };
   }, []);
 
   return (
     <main className="container text-center py-5">
-      <div className="mb-2">
-        <small>WebSocket status: {wsStatus}</small>
-      </div>
+      <p className="text-muted mb-2">WebSocket status: {wsStatus}</p>
 
-      <div className="d-flex justify-content-center align-items-center mb-4 gap-3">
-        <h2 className="m-0">Lobby</h2>
-        <h2 className="m-0">
-          <strong>{players.length}</strong> Players Online
-        </h2>
-      </div>
+      <h2 className="mb-3">Lobby</h2>
+      <p className="mb-3">
+        Players online: <strong>{players.length}</strong>
+      </p>
 
-      <section>
-        <ul className="row list-unstyled">
-          {players.map((p) => (
-            <li key={p} className="col-4 mb-3">
-              {p}
-            </li>
-          ))}
-        </ul>
+      <ul className="list-unstyled mb-4">
+        {players.map((p) => (
+          <li key={p}>{p}</li>
+        ))}
+      </ul>
 
-        <NavLink to="/game" className="btn btn-primary mt-3">
-          Start game
-        </NavLink>
-      </section>
+      <NavLink to="/game" className="btn btn-primary">
+        Start Game
+      </NavLink>
     </main>
   );
 }
