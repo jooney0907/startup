@@ -1,57 +1,27 @@
 // src/lobby/lobby.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { RealtimeBus, Events } from '../services/realtimeWs'; // NOTE: ../services
+// If your file is src/services/ws.js use this:
+import { RealtimeBus, Events } from '../services/realtimeWs';
+// If you renamed the file to realtimeWs.js instead, use:
+// import { RealtimeBus, Events } from '../services/realtimeWs';
+
 import './lobby.css';
 
 export function Lobby() {
   const [players, setPlayers] = React.useState([]);
   const [wsStatus, setWsStatus] = React.useState('connecting...');
-  const [selfName, setSelfName] = React.useState('player');
 
   React.useEffect(() => {
     let isMounted = true;
 
     const bus = new RealtimeBus();
+    const name = localStorage.getItem('userEmail') || 'Anonymous';
 
-    // figure out this user's display name
-    const storedName =
-      localStorage.getItem('userName') ||
-      localStorage.getItem('userEmail') ||
-      'player';
-    const name = storedName.split('@')[0];
-    setSelfName(name);
-
-    // handle JOIN/LEAVE messages from the server
-    const handleMessage = (msg) => {
-      if (!isMounted || !msg || typeof msg !== 'object') return;
-      const { type, payload } = msg;
-      if (!payload || !payload.name) return;
-
-      if (type === Events.JOIN) {
-        setPlayers((prev) => {
-          if (prev.includes(payload.name)) return prev;
-          return [...prev, payload.name]; // <-- correct spread
-        });
-      } else if (type === Events.LEAVE) {
-        setPlayers((prev) => prev.filter((p) => p !== payload.name));
-      }
-    };
-
-    const unsubscribe = bus.subscribe(handleMessage);
-
-    // connection status
     const handleOpen = () => {
       if (!isMounted) return;
       setWsStatus('connected');
-
-      // always add yourself locally
-      setPlayers((prev) => {
-        if (prev.includes(name)) return prev;
-        return [...prev, name];
-      });
-
-      // and announce JOIN to others
+      // tell others we joined
       bus.send(Events.JOIN, { name });
     };
 
@@ -60,8 +30,7 @@ export function Lobby() {
       setWsStatus('disconnected');
     };
 
-    const handleError = (e) => {
-      console.error('WebSocket error', e);
+    const handleError = () => {
       if (!isMounted) return;
       setWsStatus('error');
     };
@@ -70,13 +39,28 @@ export function Lobby() {
     bus.socket.addEventListener('close', handleClose);
     bus.socket.addEventListener('error', handleError);
 
-    // cleanup
+    // Handle incoming JOIN / LEAVE
+    const unsubscribe = bus.subscribe((msg) => {
+      if (!isMounted) return;
+      console.log('WS message:', msg);
+
+      if (msg.type === Events.JOIN && msg.payload?.name) {
+        setPlayers((prev) => {
+          const s = new Set(prev);
+          s.add(msg.payload.name);
+          return [...s];
+        });
+      } else if (msg.type === Events.LEAVE && msg.payload?.name) {
+        setPlayers((prev) => prev.filter((p) => p !== msg.payload.name));
+      }
+    });
+
     return () => {
       isMounted = false;
       try {
         bus.send(Events.LEAVE, { name });
       } catch {
-        // socket may already be closed
+        // ignore if socket already closed
       }
       unsubscribe();
       bus.socket.removeEventListener('open', handleOpen);
@@ -87,29 +71,20 @@ export function Lobby() {
   }, []);
 
   return (
-    <main className="container py-4 lobby text-center">
+    <main className="container py-4 lobby">
       <h1 className="mb-3">Lobby</h1>
 
-      <p className="mb-1 text-muted">
+      <p className="text-muted mb-1">
         WebSocket status: <strong>{wsStatus}</strong>
       </p>
 
       <p className="mb-3">
-        You are logged in as: <strong>{selfName}</strong>
-      </p>
-
-      <p className="mb-3">
-        When you and your friends open this lobby page, your names will appear
-        here in real time.
-      </p>
-
-      <p className="mb-2">
-        Players online: <strong>{players.length}</strong>
+        When you and your friends open this lobby page, your names will appear here in real time.
       </p>
 
       <ul className="list-unstyled mb-4">
         {players.length === 0 && (
-          <li className="text-muted">No players yet — share the lobby link!</li>
+          <li className="text-muted">No players connected yet.</li>
         )}
         {players.map((p) => (
           <li key={p}>{p}</li>

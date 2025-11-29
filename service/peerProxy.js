@@ -3,22 +3,24 @@ const { WebSocketServer } = require('ws');
 
 class PeerProxy {
   constructor(httpServer) {
-    // Create a WebSocket server that hooks into the existing HTTP server
     const wss = new WebSocketServer({ noServer: true });
 
-    // Upgrade HTTP -> WebSocket
     httpServer.on('upgrade', (req, socket, head) => {
-      wss.handleUpgrade(req, socket, head, (ws) => {
-        wss.emit('connection', ws, req);
-      });
+      // Only handle WebSocket upgrades on /ws
+      if (req.url === '/ws') {
+        wss.handleUpgrade(req, socket, head, (ws) => {
+          wss.emit('connection', ws, req);
+        });
+      } else {
+        socket.destroy();
+      }
     });
 
-    // When a client connects
     wss.on('connection', (ws) => {
       console.log('WebSocket client connected');
 
-      // When a client sends a message, broadcast it to everyone
       ws.on('message', (data) => {
+        console.log('WS broadcast:', data.toString());
         for (const client of wss.clients) {
           if (client.readyState === ws.OPEN) {
             client.send(data);

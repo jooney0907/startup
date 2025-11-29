@@ -4,29 +4,36 @@ export const Events = {
   JOIN: 'JOIN',
   LEAVE: 'LEAVE',
   CHAT: 'CHAT',
-  // You can add more later (e.g., NEW_QUESTION, ANSWER)
 };
 
 export class RealtimeBus {
   constructor() {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = window.location.host;
 
-    // IMPORTANT: connect to /ws so the reverse proxy and peerProxy see it
-    const url = `${protocol}://${window.location.host}/ws`;
+    // In dev, Vite runs on 5173 but your Node service is 4000.
+    // In prod, frontend and backend share the same host, and WS is on /ws.
+    let url;
+    if (host.startsWith('localhost')) {
+      url = `${protocol}://localhost:4000/ws`;
+    } else {
+      url = `${protocol}://${host}/ws`;
+    }
 
     this.socket = new WebSocket(url);
     this.handlers = new Set();
 
     this.socket.addEventListener('open', () => {
-      console.log('WebSocket connected');
+      console.log('WebSocket connected to', url);
     });
 
-    this.socket.addEventListener('message', (ev) => {
+    this.socket.addEventListener('message', (event) => {
       try {
-        const msg = JSON.parse(ev.data);
+        const msg = JSON.parse(event.data);
+        console.log('WS message from server:', msg);
         this.handlers.forEach((h) => h(msg));
-      } catch (err) {
-        console.error('Bad WebSocket message', err);
+      } catch (e) {
+        console.error('Bad WS message', e);
       }
     });
 
@@ -34,20 +41,23 @@ export class RealtimeBus {
       console.log('WebSocket closed');
     });
 
-    this.socket.addEventListener('error', (err) => {
-      console.error('WebSocket error', err);
+    this.socket.addEventListener('error', (e) => {
+      console.error('WebSocket error', e);
     });
   }
 
   send(type, payload = {}) {
     const msg = { type, payload, ts: Date.now() };
-
-    const sendNow = () => this.socket.send(JSON.stringify(msg));
+    const data = JSON.stringify(msg);
 
     if (this.socket.readyState === WebSocket.OPEN) {
-      sendNow();
+      this.socket.send(data);
     } else {
-      this.socket.addEventListener('open', () => sendNow(), { once: true });
+      const onOpen = () => {
+        this.socket.removeEventListener('open', onOpen);
+        this.socket.send(data);
+      };
+      this.socket.addEventListener('open', onOpen);
     }
   }
 
