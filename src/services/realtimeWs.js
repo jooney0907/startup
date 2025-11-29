@@ -11,10 +11,8 @@ export class RealtimeBus {
   constructor() {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
-    // IMPORTANT:
-    // This assumes your frontend is served by the same origin as the backend
-    // (e.g., deployed version, or Vite dev proxy).
-    const url = `${protocol}://${window.location.host}`;
+    // IMPORTANT: connect to /ws so the reverse proxy and peerProxy see it
+    const url = `${protocol}://${window.location.host}/ws`;
 
     this.socket = new WebSocket(url);
     this.handlers = new Set();
