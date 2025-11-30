@@ -1,13 +1,8 @@
-// src/game/gameNotifier.js
-
-// Event types used across the app
 export const GameEvent = {
   System: "system",
   End: "gameEnd",
   Start: "gameStart",
 };
-
-// Message envelope sent over WebSocket
 class EventMessage {
   constructor(from, type, value) {
     this.from = from;
@@ -22,10 +17,6 @@ class GameEventNotifier {
 
   constructor() {
     const protocol = window.location.protocol === "http:" ? "ws" : "wss";
-
-    // 🔑 IMPORTANT:
-    // In dev (localhost) talk directly to the backend on port 4000.
-    // In production, use the same host as the page.
     const socketUrl =
       window.location.hostname === "localhost"
         ? `${protocol}://localhost:4000/ws`
@@ -55,8 +46,6 @@ class GameEventNotifier {
       }
     };
   }
-
-  // Send an event to everyone via the server, and also locally
   broadcastEvent(from, type, value) {
     const event = new EventMessage(from, type, value);
 
@@ -80,7 +69,4 @@ class GameEventNotifier {
     this.handlers.forEach((handler) => handler(event));
   }
 }
-
-// ✅ IMPORTANT: use the *class name* here, not itself.
-// If you had `new GameNotifier()` before, that would crash the module.
 export const GameNotifier = new GameEventNotifier();

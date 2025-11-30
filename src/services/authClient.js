@@ -29,8 +29,6 @@ export async function registerUser(email, password) {
   });
 
   const data = await handleJson(res);
-
-  // 👇 store the email so the lobby can read it
   localStorage.setItem("userEmail", data.email || email);
 
   return data;
@@ -45,8 +43,6 @@ export async function loginUser(email, password) {
   });
 
   const data = await handleJson(res);
-
-  // 👇 store the email on successful login
   localStorage.setItem("userEmail", data.email || email);
 
   return data;
@@ -57,8 +53,6 @@ export async function logoutUser() {
     method: "DELETE",
     credentials: "include",
   });
-
-  // 👇 clear the stored email on logout
   localStorage.removeItem("userEmail");
 
   if (!res.ok && res.status !== 204) {

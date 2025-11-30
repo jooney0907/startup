@@ -1,7 +1,3 @@
-// src/services/realtime.js
-// Lightweight per-room event bus using BroadcastChannel (multi-tab demo).
-// In production, replace with WebSocket/Socket.io/Pusher/etc.
-
 export const Events = {
   NEW_QUESTION: "NEW_QUESTION",
   RESET: "RESET",

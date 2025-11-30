@@ -1,5 +1,3 @@
-// src/services/ws.js  (or realtimeWs.js)
-
 export const Events = {
   JOIN: 'JOIN',
   LEAVE: 'LEAVE',
@@ -23,6 +21,4 @@ export class RealtimeBus {
       }
     });
   }
-
-  // ... send / subscribe / close ...
 }

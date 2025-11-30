@@ -1,4 +1,3 @@
-// src/lobby/lobby.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { GameEvent, GameNotifier } from "../game/gameNotifier";
@@ -8,8 +7,6 @@ export function Lobby() {
   const [events, setEvents] = React.useState([]);
   const [userName, setUserName] = React.useState("");
   const navigate = useNavigate();
-
-  // Get username from localStorage (same as your game)
   React.useEffect(() => {
     const raw =
       localStorage.getItem("userEmail") ||
@@ -17,8 +14,6 @@ export function Lobby() {
       "player";
     setUserName(raw);
   }, []);
-
-  // Hook into GameNotifier once the username exists
   React.useEffect(() => {
     if (!userName) return;
 
@@ -39,16 +34,12 @@ export function Lobby() {
       GameNotifier.removeHandler(handleGameEvent);
     };
   }, [userName]);
-
-  // Start button -> go to the React route for your game
   function handleStartGame() {
     if (userName) {
       GameNotifier.broadcastEvent(userName, GameEvent.Start, {
         msg: "started a new game",
       });
     }
-
-    // 👇 change "/game" to whatever your actual route is
     navigate("/game");
   }
 

@@ -1,5 +1,3 @@
-// src/services/realtimeWs.js
-
 export const Events = {
   JOIN: 'JOIN',
   LEAVE: 'LEAVE',
