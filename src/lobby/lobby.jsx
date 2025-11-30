@@ -1,41 +1,59 @@
-// src/lobby/Lobby.jsx
-import React from 'react';
-import { GameEvent, GameNotifier } from '../play/gameNotifier';
-import './players.css';
+// src/lobby/lobby.jsx
+import React from "react";
+import { GameEvent, GameNotifier } from "../game/gameNotifier";
+import "../game/players.css";
 
-export function Lobby(props) {
-  const userName = props.userName;
-
+export function Lobby() {
   const [events, setEvents] = React.useState([]);
+  const [userName, setUserName] = React.useState("");
 
+  // Get username from localStorage (same as your game)
   React.useEffect(() => {
-    GameNotifier.addHandler(handleGameEvent);
-
-    // announce join
-    GameNotifier.broadcastEvent(userName, GameEvent.System, { msg: "connected" });
-
-    return () => {
-      GameNotifier.broadcastEvent(userName, GameEvent.System, { msg: "disconnected" });
-      GameNotifier.removeHandler(handleGameEvent);
-    };
+    const raw =
+      localStorage.getItem("userEmail") ||
+      localStorage.getItem("userName") ||
+      "player";
+    setUserName(raw);
   }, []);
 
-  function handleGameEvent(event) {
-    setEvents((prev) => [...prev, event]);
-  }
+  // Hook into GameNotifier once the username exists
+  React.useEffect(() => {
+    if (!userName) return;
 
+    function handleGameEvent(event) {
+      setEvents((prev) => [...prev, event]);
+    }
+
+    // Connect listener
+    GameNotifier.addHandler(handleGameEvent);
+
+    // Announce join
+    GameNotifier.broadcastEvent(userName, GameEvent.System, {
+      msg: "connected",
+    });
+
+    // Cleanup on unmount → announce leave
+    return () => {
+      GameNotifier.broadcastEvent(userName, GameEvent.System, {
+        msg: "disconnected",
+      });
+      GameNotifier.removeHandler(handleGameEvent);
+    };
+  }, [userName]);
+
+  // Display messages like Simon
   function renderMessages() {
     return events.map((event, i) => {
-      let message = '';
+      if (event.type !== GameEvent.System) return null;
 
-      if (event.type === GameEvent.System) {
-        message = event.value.msg;
-      }
+      const fromName = event.from
+        ? event.from.split("@")[0]
+        : "Unknown";
 
       return (
         <div key={i} className="event">
-          <span className="player-event">{event.from.split('@')[0]}</span>
-          {message}
+          <span className="player-event">{fromName}</span>
+          {event.value?.msg}
         </div>
       );
     });

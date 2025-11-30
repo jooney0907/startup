@@ -1,44 +1,37 @@
 // service/peerProxy.js
 const { WebSocketServer } = require('ws');
 
-class PeerProxy {
-  constructor(httpServer) {
-    const wss = new WebSocketServer({ noServer: true });
+function peerProxy(httpServer) {
+  const socketServer = new WebSocketServer({ server: httpServer });
 
-    httpServer.on('upgrade', (req, socket, head) => {
-      // Only handle WebSocket upgrades on /ws
-      if (req.url === '/ws') {
-        wss.handleUpgrade(req, socket, head, (ws) => {
-          wss.emit('connection', ws, req);
-        });
-      } else {
-        socket.destroy();
+  socketServer.on('connection', (socket) => {
+    socket.isAlive = true;
+
+    // Forward messages to everyone (including the sender, which is fine)
+    socket.on('message', (data) => {
+      for (const client of socketServer.clients) {
+        if (client.readyState === socket.OPEN) {
+          client.send(data);
+        }
       }
     });
 
-    wss.on('connection', (ws) => {
-      console.log('WebSocket client connected');
-
-      ws.on('message', (data) => {
-        console.log('WS broadcast:', data.toString());
-        for (const client of wss.clients) {
-          if (client.readyState === ws.OPEN) {
-            client.send(data);
-          }
-        }
-      });
-
-      ws.on('close', () => {
-        console.log('WebSocket client disconnected');
-      });
+    socket.on('pong', () => {
+      socket.isAlive = true;
     });
+  });
 
-    this.wss = wss;
-  }
-}
-
-function peerProxy(httpServer) {
-  return new PeerProxy(httpServer);
+  // Ping clients to keep them alive
+  setInterval(() => {
+    for (const client of socketServer.clients) {
+      if (client.isAlive === false) {
+        client.terminate();
+        continue;
+      }
+      client.isAlive = false;
+      client.ping();
+    }
+  }, 10000);
 }
 
 module.exports = { peerProxy };

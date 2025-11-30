@@ -1,10 +1,13 @@
-// src/play/gameNotifier.js (or wherever this file lives)
-const GameEvent = {
-  System: 'system',
-  End: 'gameEnd',
-  Start: 'gameStart',
+// src/game/gameNotifier.js
+
+// Event types used across the app
+export const GameEvent = {
+  System: "system",
+  End: "gameEnd",
+  Start: "gameStart",
 };
 
+// Message envelope sent over WebSocket
 class EventMessage {
   constructor(from, type, value) {
     this.from = from;
@@ -18,16 +21,29 @@ class GameEventNotifier {
   handlers = [];
 
   constructor() {
-    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-    const host = window.location.host; // works with your proxy/dev setup
-    this.socket = new WebSocket(`${protocol}://${host}/ws`);
+    const protocol = window.location.protocol === "http:" ? "ws" : "wss";
+
+    // 🔑 IMPORTANT:
+    // In dev (localhost) talk directly to the backend on port 4000.
+    // In production, use the same host as the page.
+    const socketUrl =
+      window.location.hostname === "localhost"
+        ? `${protocol}://localhost:4000/ws`
+        : `${protocol}://${window.location.host}/ws`;
+
+    console.log("Connecting WS to", socketUrl);
+    this.socket = new WebSocket(socketUrl);
 
     this.socket.onopen = () => {
-      console.log('WS connected');
+      console.log("WS connected");
     };
 
     this.socket.onclose = () => {
-      console.log('WS disconnected');
+      console.log("WS disconnected");
+    };
+
+    this.socket.onerror = (err) => {
+      console.error("WS error", err);
     };
 
     this.socket.onmessage = async (msg) => {
@@ -35,20 +51,19 @@ class GameEventNotifier {
         const event = JSON.parse(await msg.data.text());
         this.receiveEvent(event);
       } catch (e) {
-        console.error('Bad WS message', e);
+        console.error("Bad WS message", e);
       }
     };
   }
 
+  // Send an event to everyone via the server, and also locally
   broadcastEvent(from, type, value) {
     const event = new EventMessage(from, type, value);
 
-    // send to server so other clients see it
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(event));
     }
 
-    // also deliver locally so the sender sees their own event immediately
     this.receiveEvent(event);
   }
 
@@ -66,5 +81,6 @@ class GameEventNotifier {
   }
 }
 
-const GameNotifier = new GameEventNotifier();
-export { GameEvent, GameNotifier };
+// ✅ IMPORTANT: use the *class name* here, not itself.
+// If you had `new GameNotifier()` before, that would crash the module.
+export const GameNotifier = new GameEventNotifier();
