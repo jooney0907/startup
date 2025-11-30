@@ -11,8 +11,6 @@ export class RealtimeBus {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const host = window.location.host;
 
-    // In dev, Vite runs on 5173 but your Node service is 4000.
-    // In prod, frontend and backend share the same host, and WS is on /ws.
     let url;
     if (host.startsWith('localhost')) {
       url = `${protocol}://localhost:4000/ws`;

@@ -1,3 +1,4 @@
+// src/play/gameNotifier.js (or wherever this file lives)
 const GameEvent = {
   System: 'system',
   End: 'gameEnd',
@@ -17,16 +18,37 @@ class GameEventNotifier {
   handlers = [];
 
   constructor() {
-    setInterval(() => {
-      const score = Math.floor(Math.random() * 3000);
-      const date = new Date().toLocaleDateString();
-      const userName = 'Eich';
-      this.broadcastEvent(userName, GameEvent.End, { name: userName, score: score, date: date });
-    }, 5000);
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    const host = window.location.host; // works with your proxy/dev setup
+    this.socket = new WebSocket(`${protocol}://${host}/ws`);
+
+    this.socket.onopen = () => {
+      console.log('WS connected');
+    };
+
+    this.socket.onclose = () => {
+      console.log('WS disconnected');
+    };
+
+    this.socket.onmessage = async (msg) => {
+      try {
+        const event = JSON.parse(await msg.data.text());
+        this.receiveEvent(event);
+      } catch (e) {
+        console.error('Bad WS message', e);
+      }
+    };
   }
 
   broadcastEvent(from, type, value) {
     const event = new EventMessage(from, type, value);
+
+    // send to server so other clients see it
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(event));
+    }
+
+    // also deliver locally so the sender sees their own event immediately
     this.receiveEvent(event);
   }
 
@@ -35,15 +57,12 @@ class GameEventNotifier {
   }
 
   removeHandler(handler) {
-    this.handlers.filter((h) => h !== handler);
+    this.handlers = this.handlers.filter((h) => h !== handler);
   }
 
   receiveEvent(event) {
     this.events.push(event);
-
-    this.handlers.forEach((handler) => {
-      handler(event);
-    });
+    this.handlers.forEach((handler) => handler(event));
   }
 }
 

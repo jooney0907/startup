@@ -1,4 +1,3 @@
-
 const BASE = "/api";
 
 async function handleJson(res) {
@@ -25,11 +24,16 @@ export async function registerUser(email, password) {
   const res = await fetch(`${BASE}/auth/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include", 
+    credentials: "include",
     body: JSON.stringify({ email, password }),
   });
 
-  return handleJson(res); 
+  const data = await handleJson(res);
+
+  // 👇 store the email so the lobby can read it
+  localStorage.setItem("userEmail", data.email || email);
+
+  return data;
 }
 
 export async function loginUser(email, password) {
@@ -40,7 +44,12 @@ export async function loginUser(email, password) {
     body: JSON.stringify({ email, password }),
   });
 
-  return handleJson(res); 
+  const data = await handleJson(res);
+
+  // 👇 store the email on successful login
+  localStorage.setItem("userEmail", data.email || email);
+
+  return data;
 }
 
 export async function logoutUser() {
@@ -49,7 +58,9 @@ export async function logoutUser() {
     credentials: "include",
   });
 
-  
+  // 👇 clear the stored email on logout
+  localStorage.removeItem("userEmail");
+
   if (!res.ok && res.status !== 204) {
     throw new Error("Logout failed");
   }
@@ -61,11 +72,10 @@ export async function fetchScores() {
     credentials: "include",
   });
 
-  return handleJson(res); 
+  return handleJson(res);
 }
 
 export async function submitScore(score) {
-  
   const res = await fetch(`${BASE}/score`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -73,5 +83,5 @@ export async function submitScore(score) {
     body: JSON.stringify(score),
   });
 
-  return handleJson(res); 
+  return handleJson(res);
 }

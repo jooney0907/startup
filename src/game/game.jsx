@@ -3,6 +3,8 @@ import "./game.css";
 import { useNavigate } from "react-router-dom";
 import { getOneQuestion } from "../services/triviaApi.js";
 import { submitScore } from "../services/authClient.js";
+import { Players } from "./players";                 // NEW
+import { GameEvent, GameNotifier } from "./gameNotifier"; // NEW
 
 export function Game() {
   const navigate = useNavigate();
@@ -16,6 +18,36 @@ export function Game() {
 
   const [saving, setSaving] = React.useState(false);
   const [saveError, setSaveError] = React.useState("");
+
+  const [userName, setUserName] = React.useState("Player"); // NEW
+
+  // NEW: derive display name once
+  React.useEffect(() => {
+    const raw =
+      localStorage.getItem("userName") ||
+      localStorage.getItem("userEmail") ||
+      "Player";
+    setUserName(raw);
+  }, []);
+
+  // NEW: broadcast join / leave
+  React.useEffect(() => {
+    if (!userName) return;
+
+    GameNotifier.broadcastEvent(
+      userName,
+      GameEvent.System,
+      { msg: "joined the lobby" }
+    );
+
+    return () => {
+      GameNotifier.broadcastEvent(
+        userName,
+        GameEvent.System,
+        { msg: "left the lobby" }
+      );
+    };
+  }, [userName]);
 
   async function loadQuestion() {
     try {
@@ -77,6 +109,7 @@ export function Game() {
   if (error) {
     return (
       <main className="game-page">
+        <Players userName={userName} /> {/* NEW */}
         <section className="game-card text-center">
           <p>{error}</p>
           <button className="btn btn-primary mt-3" onClick={loadQuestion}>
@@ -90,6 +123,7 @@ export function Game() {
   if (loading || !question) {
     return (
       <main className="game-page">
+        <Players userName={userName} /> {/* NEW */}
         <section className="game-card text-center">
           <p>Loading question...</p>
         </section>
@@ -99,6 +133,7 @@ export function Game() {
 
   return (
     <main className="game-page">
+      <Players userName={userName} /> {/* NEW */}
       <section className="game-card">
         <header className="game-header">
           <h2 className="game-title">Quiztopia</h2>
