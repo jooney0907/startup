@@ -1,11 +1,13 @@
 // src/lobby/lobby.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { GameEvent, GameNotifier } from "../game/gameNotifier";
 import "../game/players.css";
 
 export function Lobby() {
   const [events, setEvents] = React.useState([]);
   const [userName, setUserName] = React.useState("");
+  const navigate = useNavigate();
 
   // Get username from localStorage (same as your game)
   React.useEffect(() => {
@@ -24,15 +26,12 @@ export function Lobby() {
       setEvents((prev) => [...prev, event]);
     }
 
-    // Connect listener
     GameNotifier.addHandler(handleGameEvent);
 
-    // Announce join
     GameNotifier.broadcastEvent(userName, GameEvent.System, {
       msg: "connected",
     });
 
-    // Cleanup on unmount → announce leave
     return () => {
       GameNotifier.broadcastEvent(userName, GameEvent.System, {
         msg: "disconnected",
@@ -41,30 +40,35 @@ export function Lobby() {
     };
   }, [userName]);
 
-  // When the Start button is clicked
+  // Start button -> go to the React route for your game
   function handleStartGame() {
     if (userName) {
-      // Optional: broadcast a "started game" event
       GameNotifier.broadcastEvent(userName, GameEvent.Start, {
-        msg: "started a game",
+        msg: "started a new game",
       });
     }
 
-    // Go to your game route — change "/play" if your route is different
-    window.location.href = "/play";
+    // 👇 change "/game" to whatever your actual route is
+    navigate("/game");
   }
 
-  // Display messages like Simon
   function renderMessages() {
     return events.map((event, i) => {
-      if (event.type !== GameEvent.System) return null;
+      let message = "unknown";
+      if (event.type === GameEvent.End) {
+        message = `scored ${event.value.score}`;
+      } else if (event.type === GameEvent.Start) {
+        message = `started a new game`;
+      } else if (event.type === GameEvent.System) {
+        message = event.value.msg;
+      }
 
       const fromName = event.from ? event.from.split("@")[0] : "Unknown";
 
       return (
         <div key={i} className="event">
           <span className="player-event">{fromName}</span>
-          {event.value?.msg}
+          {message}
         </div>
       );
     });
@@ -72,10 +76,11 @@ export function Lobby() {
 
   return (
     <div className="players">
-      <div className="player-name">Lobby</div>
+      <div>
+        Player <span className="player-name">{userName}</span>
+      </div>
       <div id="player-messages">{renderMessages()}</div>
 
-      {/* Start game button */}
       <div style={{ marginTop: "1rem", textAlign: "center" }}>
         <button className="btn btn-primary" onClick={handleStartGame}>
           Start Game
