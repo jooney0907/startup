@@ -41,14 +41,25 @@ export function Lobby() {
     };
   }, [userName]);
 
+  // When the Start button is clicked
+  function handleStartGame() {
+    if (userName) {
+      // Optional: broadcast a "started game" event
+      GameNotifier.broadcastEvent(userName, GameEvent.Start, {
+        msg: "started a game",
+      });
+    }
+
+    // Go to your game route — change "/play" if your route is different
+    window.location.href = "/play";
+  }
+
   // Display messages like Simon
   function renderMessages() {
     return events.map((event, i) => {
       if (event.type !== GameEvent.System) return null;
 
-      const fromName = event.from
-        ? event.from.split("@")[0]
-        : "Unknown";
+      const fromName = event.from ? event.from.split("@")[0] : "Unknown";
 
       return (
         <div key={i} className="event">
@@ -63,6 +74,13 @@ export function Lobby() {
     <div className="players">
       <div className="player-name">Lobby</div>
       <div id="player-messages">{renderMessages()}</div>
+
+      {/* Start game button */}
+      <div style={{ marginTop: "1rem", textAlign: "center" }}>
+        <button className="btn btn-primary" onClick={handleStartGame}>
+          Start Game
+        </button>
+      </div>
     </div>
   );
 }
