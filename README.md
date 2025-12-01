@@ -111,8 +111,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [X] **Backend listens for WebSocket connection** - Backend WebSocket mangament executed in peerProxy.js
+- [X] **Frontend makes WebSocket connection** - Frontend Websocket management executed in realtimeWs.js 
+- [X] **Data sent over WebSocket connection** - Json representation of game notifications of when players leave/join. 
+- [X] **WebSocket data displayed** - The lobby and game displays when players connect and leave. 
+- [X] **Application is fully functional** - The app seems to be working! :D
