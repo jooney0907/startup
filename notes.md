@@ -164,3 +164,173 @@ A DNS A record maps a hostname directly to an IPv4 address and cannot target ano
 Port 443 is reserved for HTTPS, port 80 for HTTP, and port 22 for SSH.
 
 Promise.resolve('done').then(v => console.log(v)); prints done.
+
+Networking / HTTP
+
+Default ports
+
+HTTP: 80
+
+HTTPS: 443
+
+SSH: 22
+
+HTTP status code ranges
+
+300s: Redirection (resource moved / use different URL)
+
+400s: Client error (your request is bad: auth, not found, validation, etc.)
+
+500s: Server error (server failed while handling a valid request)
+
+Content-Type header
+
+Tells the receiver what format the body is in (and how to parse it), e.g. application/json, text/html, multipart/form-data, etc.
+
+Cookies
+
+Secure cookie
+
+Cookie is only sent over HTTPS, not plain HTTP.
+
+HttpOnly cookie
+
+Cookie is not accessible to JavaScript (document.cookie can’t read it). Helps against XSS stealing cookies.
+
+SameSite cookie
+
+Controls whether the browser sends the cookie on cross-site requests:
+
+Strict: only same-site requests
+
+Lax: sent on top-level navigations (common safe default)
+
+None: sent cross-site only if Secure is also set (modern browsers)
+
+Express / Node / Mongo (depends on the code shown)
+
+Express middleware console.log output for GET /api/document
+
+Cannot be determined without the exact middleware code/order.
+
+Rule: Express runs middleware in the order registered. req.path would be /api/document, req.originalUrl might include querystring, mounted routers affect what req.url/req.baseUrl look like.
+
+“Given Express service code… what does front-end fetch(...) return?”
+
+Fetch returns a Promise that resolves to a Response object.
+
+If the code does return fetch(...).then(r => r.json()), it returns a Promise of parsed JSON.
+
+If it does await fetch(...) without .json(), you get the Response, not the data.
+
+MongoDB query { name: "Mark" } matches which docs
+
+Matches documents where name equals "Mark" (case-sensitive by default).
+
+Also matches if name is an array containing "Mark" (Mongo equality matches array elements).
+
+How should user passwords be stored?
+
+Never plaintext, never reversible encryption.
+
+Store a salted, slow hash using a password KDF like bcrypt, scrypt, or Argon2 (commonly Argon2id or bcrypt), with a per-user salt.
+
+WebSockets
+
+What will front end log? (depends on code)
+
+Cannot be determined without the exact backend + frontend websocket code.
+
+Rule: the frontend logs whatever is passed to its handlers (onopen, onmessage, onclose, onerror). If server sends "hi", onmessage typically logs event.data === "hi".
+
+What is the websocket protocol intended to provide?
+
+A persistent, full-duplex connection between client and server over one TCP connection, enabling real-time bidirectional messaging (vs request/response polling).
+
+Acronyms
+
+JSX: JavaScript XML (syntax used by React to describe UI)
+
+JS: JavaScript
+
+AWS: Amazon Web Services
+
+NPM: Node Package Manager (and the package registry ecosystem)
+
+NVM: Node Version Manager
+
+React
+
+What text content will a React component generate? (depends on component + props)
+
+Cannot be determined without the component code + parameter values.
+
+Rule: evaluate the component function with the given props, see what strings/elements it returns; rendered text is the concatenation of text nodes.
+
+Given a set of React components that include each other, what will be generated?
+
+Whatever the root component returns after expanding children; props flow down; final output is the rendered element tree.
+
+What does React.useState do?
+
+Adds state to a function component: returns [value, setValue]. Updating state triggers a re-render.
+
+What are React Hooks used for?
+
+To use React features (state, lifecycle/effects, context, refs, etc.) inside function components and reusable custom hooks.
+
+Hooks you listed (what they do)
+
+State Hook (useState): component state
+
+Context Hook (useContext): read a context value (global-ish shared state)
+
+Ref Hook (useRef): mutable container that persists across renders; often used to reference DOM nodes
+
+Effect Hook (useEffect): run side effects after render (and cleanup)
+
+Performance Hooks (commonly **useMemo / useCallback / useTransition / useDeferredValue):
+
+memoize computed values (useMemo)
+
+memoize function identities (useCallback)
+
+keep UI responsive during expensive updates (useTransition, useDeferredValue)
+
+React Router (general truths)
+
+Without the exact snippet, typical true statements are:
+
+Routes are matched by the URL, and the matching route’s element renders.
+
+Nested routes render inside an <Outlet />.
+
+<Link to="..."> navigates client-side (no full page reload).
+
+useParams() reads path params (like :id).
+
+useNavigate() performs programmatic navigation.
+
+Tooling / Files
+
+What does package.json do?
+
+Defines a Node project: name/version, dependencies, scripts, and other metadata/config.
+
+What does fetch do?
+
+Makes HTTP requests and returns a Promise of a Response.
+
+What does Node.js do?
+
+Runs JavaScript on the server (V8 runtime) with system APIs (files, network, processes).
+
+What does pm2 do?
+
+A process manager for Node apps: keeps them alive, restarts on crash, clustering, logs, startup on boot.
+
+What does Vite do?
+
+A modern frontend toolchain: dev server + bundling (fast HMR in dev; builds optimized assets for production).
+
+If you paste the specific Express middleware, fetch code, websocket code, and React/Router snippets from your practice sheet, I can give the exact outputs/choices for those items.
